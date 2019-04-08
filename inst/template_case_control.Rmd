@@ -1,0 +1,83 @@
+---
+author: "Brandon Sie"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document: 
+    code_folding: hide
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: inline
+params:
+  config: NULL
+  candidates: NULL
+  graphs: NULL
+  clusters: NULL
+  motifs: NULL
+---
+
+
+# I. Introduction <font size="1"><a href="#top">[Top]</a></font> {.tabset}
+
+## Report Overview
+
+```{r}
+
+#get proj_id etc. from params$config.
+#document case samples and control samples
+#explain sample subsetting, RCP calculation (dplyr?), statistical calcs (plotdata)
+
+```
+
+## Config Documentation
+
+```{r}
+
+#document params$config
+
+```
+
+# II. Candidate Antigen Tables <font size="1"><a href="#top">[Top]</a></font>
+
+```{r}
+
+#precompute candidate antigen table and annotations
+
+```
+
+# III. Exploratory Analysis <font size="1"><a href="#top">[Top]</a></font>
+
+```{r}
+#precompute the 3 plots
+
+```
+
+# IV. Hit Clustering <font size="1"><a href="#top">[Top]</a></font>
+
+```{r}
+#precompute clustergram 1
+# precompute epitopefindr
+# precompute epitope clustergram
+
+```
+
+# V. Epitope Motifs <font size="1"><a href="#top">[Top]</a></font> {.tabset}
+
+```{r}
+#print precomputed motifs
+```
+
+
+<!-- 
+Pass whole precomputed tables as params
+specify libraries
+
+
+
+https://stackoverflow.com/questions/30377213/how-to-include-rmarkdown-file-in-r-package/30377598
+put rmd in inst
+installed inst goes to main directory
+after build/install, reference with 
+system.file("template_case_control.Rmd", package="phipcc")
+"C:/Users/Brandon/Documents/R/win-library/3.5/phipcc/template_case_control.Rmd"
+-->
