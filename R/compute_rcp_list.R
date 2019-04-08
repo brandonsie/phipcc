@@ -50,9 +50,14 @@ compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
     print(names(case)[i])
     print(class(ctrl)[1])
 
-    if(class(ctrl)[1] == "character" & ctrl[1] == "self"){
-      print("running self")
-      output_data[[i]] <- RCPGenerator(case[[i]], "self", min_hits, hit_thresh[i])
+    if(class(ctrl)[1] == "character"){
+      if(ctrl[1] == "self"){
+        print("running self")
+        output_data[[i]] <- RCPGenerator(case[[i]], "self", min_hits, hit_thresh[i])
+
+      } else{
+        stop("Error: invalid ctrl input to compute_rcp_list")
+      }
 
     } else{
       print("running non-self")
