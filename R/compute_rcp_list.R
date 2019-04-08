@@ -47,7 +47,8 @@ compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
   if(length(hit_thresh) == 1) hit_thresh <- rep(hit_thresh, length(case))
 
   for(i in 1:length(case)){
-    print(i)
+    print(names(case)[i])
+    print(class(ctrl)[1])
 
     if(class(ctrl)[1] == "character" & ctrl[1] == "self"){
       print("running self")
