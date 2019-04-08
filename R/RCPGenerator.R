@@ -32,16 +32,6 @@ RCPGenerator <- function(case, ctrl, min_hits = 0, hit_thresh = 0,
   # ----------------------------------------------------------------------------
   # Configure settings
 
-  print("RCPGenerator")
-  print("dim case")
-  print(dim(case))
-  print("dim ctrl")
-  print(dim(ctrl))
-  print("min hits")
-  print(min_hits)
-  print("hit thresh")
-  print(hit_thresh)
-
   #(!) only applies to old method
   # if ctrl = "self", then assign both to be the same
   self <- FALSE

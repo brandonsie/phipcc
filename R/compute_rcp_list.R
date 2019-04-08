@@ -20,16 +20,6 @@
 
 compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
 
-  print("length case")
-  print(length(case))
-  print("length ctrl")
-  print(length(ctrl))
-  print("min hits")
-  print(min_hits)
-  print("hit thresh")
-  print(hit_thresh)
-
-
   # Check for input errors.
   if(class(ctrl)[1] == "character"){
     if(ctrl[1] != "self"){
@@ -47,12 +37,9 @@ compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
   if(length(hit_thresh) == 1) hit_thresh <- rep(hit_thresh, length(case))
 
   for(i in 1:length(case)){
-    print(names(case)[i])
-    print(class(ctrl)[1])
 
     if(class(ctrl)[1] == "character"){
       if(ctrl[1] == "self"){
-        print("running self")
         output_data[[i]] <- RCPGenerator(case[[i]], "self", min_hits, hit_thresh[i])
 
       } else{
@@ -60,7 +47,6 @@ compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
       }
 
     } else{
-      print("running non-self")
       output_data[[i]] <- RCPGenerator(case[[i]], ctrl[[i]], min_hits, hit_thresh[i])
     }
 
