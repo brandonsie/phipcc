@@ -20,6 +20,16 @@
 
 compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
 
+  print("dim case")
+  print(dim(case))
+  print("dim ctrl")
+  print(dim(ctrl))
+  print("min hits")
+  print(min_hits)
+  print("hit thresh")
+  print(hit_thresh)
+
+
   # Check for input errors.
   if(class(ctrl)[1] == "character"){
     if(ctrl[1] != "self"){
