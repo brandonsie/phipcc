@@ -50,9 +50,11 @@ compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
     print(i)
 
     if(class(ctrl)[1] == "character" & ctrl[1] == "self"){
+      print("running self")
       output_data[[i]] <- RCPGenerator(case[[i]], "self", min_hits, hit_thresh[i])
 
     } else{
+      print("running non-self")
       output_data[[i]] <- RCPGenerator(case[[i]], ctrl[[i]], min_hits, hit_thresh[i])
     }
 

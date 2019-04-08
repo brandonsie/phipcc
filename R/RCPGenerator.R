@@ -32,6 +32,7 @@ RCPGenerator <- function(case, ctrl, min_hits = 0, hit_thresh = 0,
   # ----------------------------------------------------------------------------
   # Configure settings
 
+  print("RCPGenerator")
   print("dim case")
   print(dim(case))
   print("dim ctrl")
