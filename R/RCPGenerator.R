@@ -46,14 +46,17 @@ RCPGenerator <- function(case, ctrl, min_hits = 0, hit_thresh = 0,
   }
 
   if(min_hits > 0){
-    print(dim(case))
-    print(paste("Subsetting to ", min_hits, "above", hit_thresh))
+    if(verbose){
+      print(dim(case))
+      print(paste("Subsetting to ", min_hits, "above", hit_thresh))
+    }
     num_hits <- apply(case[,-1], 1, function(x){
       sum(x > hit_thresh)
     })
 
     case <- case[num_hits >= min_hits,]
-    print(dim(case))
+
+    if(verbose) print(dim(case))
   }
 
 
