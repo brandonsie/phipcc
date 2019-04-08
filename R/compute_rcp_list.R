@@ -20,10 +20,10 @@
 
 compute_rcp_list <- function(case, ctrl, min_hits = 0, hit_thresh = 0){
 
-  print("dim case")
-  print(dim(case))
-  print("dim ctrl")
-  print(dim(ctrl))
+  print("length case")
+  print(length(case))
+  print("length ctrl")
+  print(length(ctrl))
   print("min hits")
   print(min_hits)
   print("hit thresh")
