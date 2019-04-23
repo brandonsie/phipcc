@@ -36,8 +36,6 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   stat_test <- phipmake::getparam(config, "stat_test")
   pval_correction <- phipmake::getparam(config, "pval_correction")
 
-  #(!) enrichment_thresh vs hit_thresh. needs to use list for promax/polycl. different data different threshold
-
   # For filtering hits
   min_hits_enrichment <- phipmake::getparam(config, "min_hits_enrichment") %>% as.numeric
   min_hits_rcp <- phipmake::getparam(config, "min_hits_rcp") %>% as.numeric
@@ -53,7 +51,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   protein_col_id_display <- phipmake::getparam(config, "protein_col_id_display")
   description_col_id <- phipmake::getparam(config, "description_col_id")
   flag_col_id <- phipmake::getparam(config, "flag_col_id") %>% param_split(delimiter)
-
+  pep_aa <- phipmake::getparam(config, "pep_aa")
 
   # for clustergram
   binarize_clustergram <- phipmake::getparam(config, "binarize_clustergram") %>% as.logical
