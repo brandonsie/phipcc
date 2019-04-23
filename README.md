@@ -1,11 +1,15 @@
 
+
+```
 install_github("brandonsie/epitopefindr")
 install_github("brandonsie/phipmake")
 install_github("ropensci/drake")
 install_github("brandonsie/phipcc")
 
+```
 
 
+```
 remove(list = ls())
 setwd("D:/RData/cc_test_1/")
 unloadNamespace("phipcc")
@@ -42,3 +46,5 @@ phipcc::render_from_template(
   motifs = paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/")
   cluster2 = cluster2
 )
+```
+
