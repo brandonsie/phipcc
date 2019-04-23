@@ -55,12 +55,13 @@ RCPGenerator <- function(case, ctrl, min_hits = 0, hit_thresh = 0,
     })
 
     case <- case[num_hits >= min_hits,]
+    ctrl <- ctrl[num_hits >= min_hits,]
 
     if(verbose) print(dim(case))
   }
 
 
-  print("continue")
+  if(verbose) print("continue")
 
   # ----------------------------------------------------------------------------
   # RCP calculation

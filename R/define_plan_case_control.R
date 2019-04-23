@@ -32,44 +32,81 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
   # For Statistics
   min_hits_rcpgenerator <- phipmake::getparam(config, "min_hits_rcpgenerator") %>% as.numeric
-  enrichment_thresh <- phipmake::getparam(config, "enrichment_thresh") %>% as.numeric
-  rcp_thresh <- phipmake::getparam(config, "hit_thresh") %>% as.numeric
+  rcp_thresh <- phipmake::getparam(config, "rcp_thresh") %>% as.numeric
   stat_test <- phipmake::getparam(config, "stat_test")
   pval_correction <- phipmake::getparam(config, "pval_correction")
 
   #(!) enrichment_thresh vs hit_thresh. needs to use list for promax/polycl. different data different threshold
 
-  # For filtering hits & annotations
+  # For filtering hits
   min_hits_enrichment <- phipmake::getparam(config, "min_hits_enrichment") %>% as.numeric
   min_hits_rcp <- phipmake::getparam(config, "min_hits_rcp") %>% as.numeric
   min_freq_hits_rcp <- phipmake::getparam(config, "min_freq_hits_rcp") %>% as.numeric
   pval_thresh <- phipmake::getparam(config, "pval_thresh") %>% as.numeric
+
+  # for annotations and plots
+  data_level <- phipmake::getparam(config, "data_level") %>% param_split(delimiter)
   annot_path <- phipmake::getparam(config, "annot_path")
+  peptide_col_id_match <- phipmake::getparam(config, "peptide_col_id_match")
+  protein_col_id_match <- phipmake::getparam(config, "protein_col_id_match")
+  peptide_col_id_display <- phipmake::getparam(config, "peptide_col_id_display")
+  protein_col_id_display <- phipmake::getparam(config, "protein_col_id_display")
+  description_col_id <- phipmake::getparam(config, "description_col_id")
+  flag_col_id <- phipmake::getparam(config, "flag_col_id") %>% param_split(delimiter)
+
+
+  # for clustergram
+  binarize_clustergram <- phipmake::getparam(config, "binarize_clustergram") %>% as.logical
+  sample_field_delimiter <- phipmake::getparam(config, "sample_field_delimiter")
+  sample_key_field <- phipmake::getparam(config, "sample_key_field") %>% as.numeric
 
   # for epitopefindr
   epf_params <- phipmake::getparam(config, "epf_params")
+
+  # --------------------------------------------------------------------------
+  # Output File Names (try doing this outside of the plan)
+  output.dir <- "data"
+  sn.odir <- paste0(output.dir,"/")
+  if(!dir.exists(output.dir)) dir.create(output.dir)
+
+  output.ext <- "tsv"
+  sn.ext <- paste0(".", output.ext)
+
+  names.case.data <- paste0(sn.odir, data_types, "_Case",sn.ext)
+  names.ctrl.data <- paste0(sn.odir, data_types, "_Ctrl",sn.ext)
+  names.case.rcp <- paste0(sn.odir, data_types, "_Case_RCP",sn.ext)
+  names.ctrl.rcp <- paste0(sn.odir, data_types, "_Ctrl_RCP",sn.ext)
 
 
   # ============================================================================
   # Plan Start
 
+
   plan <- drake::drake_plan(
 
-    # --------------------------------------------------------------------------
-    # Gather data
+    config = target(data.table::fread(file_in(!!config_name),
+                                      data.table = FALSE)),
+    # Gather data --------------------------------------------------------------
 
     case_data = target(
       gather_sample_list(!!data_types, !!input_files, !!case_names)
-      #gather_sample_list should return a phiplist
+      #gather_sample_list should return a list
       # element NAMES are data_types
       # elements are data corresponding to datatype. from phipmake::gather_data
     ),
     ctrl_data = target(
       gather_sample_list(!!data_types, !!input_files, !!ctrl_names)
     ),
+    #(!) need tidyeval for data.types OR bind_rows
 
-    # --------------------------------------------------------------------------
-    # Compute statistics
+    write_case_data = target(
+      phipmake::write_data(case_data, file_out(!!names.case.data))
+    ),
+    write_ctrl_data = target(
+      phipmake::write_data(ctrl_data, file_out(!!names.ctrl.data))
+    ),
+
+    # Compute statistics -------------------------------------------------------
 
     #(!) write compute_rcp_list. calls RCPGenerator for all. (try dplyr)
     case_rcp = target(
@@ -78,91 +115,129 @@ define_plan_case_control <- function(config_name = "config.tsv"){
                        hit_thresh = !!hit_thresh)),
     ctrl_rcp = target(compute_rcp_list(ctrl_data, "self")),
 
+    write_case_rcp = target(
+      phipmake::write_data(case_rcp, file_out(!!names.case.rcp))
+    ),
+    write_ctrl_rcp = target(
+      phipmake::write_data(ctrl_rcp, file_out(!!names.ctrl.rcp))
+    ),
+    # write_case_rcp_data = phipmake::write_data(case_rcp_data, "data/case_rcp_data.tsv"),
+    # write_ctrl_rcp_data = phipmake::write_data(ctrl_rcp_data, "data/ctrl_rcp_data.tsv"),
+
+    # subset data based on any filteres applied previously to case_rcp
+    case_data_subset = target(subset_data(case_data, case_rcp)),
+    ctrl_data_subset = target(subset_data(ctrl_data, case_rcp)),
+    ctrl_rcp_subset  = target(subset_data(ctrl_rcp,  case_rcp)),
+    # write_case_data_subset = phipmake::write_data(case_data_subset, "data/case_data_subset.tsv"),
+    # write_ctrl_data_subset = phipmake::write_data(ctrl_data_subset, "data/ctrl_data_subset.tsv"),
+    # write_ctrl_rcp_subset  = phipmake::write_data(ctrl_rcp_subset,  "data/ctrl_rcp_subset.tsv"),
+
     #(!) write compute_stats_list. plotdata
     data_stats = target(
-      compute_stats_list(case_data, ctrl_data, case_rcp, ctrl_rcp,
-                         !!enrichment_thresh, !!rcp_thresh,
-                         !!stat_test, !!pval_correction)
-      #(!) add params config enrichment_thresh, rcp_thresh, test
-      #(!) include multi pvalue correction here
+      compute_stats_list(
+        case_data_subset, ctrl_data_subset, case_rcp, ctrl_rcp_subset,
+        !!hit_thresh, !!rcp_thresh, !!stat_test, !!pval_correction)
     ),
 
-    # --------------------------------------------------------------------------
-    # Protein Candidate Generation
+    # Protein Candidate Generation ---------------------------------------------
 
-
-    # determine whether to use min_hits_rcp or min_freq_hits_rcp. use larger.
-    num_case_samples = target(case_data[[1]] %>% nrow - 1),
+    num_case_samples = target(case_data[[1]] %>% ncol - 1),
     num_rcp_thresh = target({
-      num_rcp_for_freq_thresh <- (num_case_samples * !!min_freq_hits_rcp) %>%
-        ceiling
+      # determineS whether to use min_hits_rcp or min_freq_hits_rcp. use larger.
+      num_rcp_for_freq_thresh <-
+        (num_case_samples * !!min_freq_hits_rcp) %>% ceiling
       num_rcp_thresh <- max(num_rcp_for_freq_thresh, !!min_hits_rcp)
     }),
 
     data_filtered = target(
       filter_hits_list(
         data_stats, !!min_hits_enrichment, num_rcp_thresh, !!pval_thresh)
+      #(!) add check if any list has 0 hits after this. for each datatype.
+      # if so then delete that element of data_filtered.
     ),
 
-    #(!) add check if any list has 0 hits after this. for each datatype.
-    # if so then delete that element of data_filtered.
+    annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
+
+    data_annotated = target(
+      annotate_cc_list(data_filtered, !!data_level, annot,
+        !!peptide_col_id_match, !!protein_col_id_match, !!peptide_col_id_display,
+        !!protein_col_id_display, !!description_col_id, !!flag_col_id
+      )
+    ),
+
+    data_annotated_rbind = target(dplyr::bind_rows(data_annotated)),
+    candidate_table = target(prepare_candidate_table(data_annotated_rbind)),
+    candidate_table_html = target(prepare_candidate_table_html(candidate_table)),
+
+    candidate_table_flagged = target(
+      candidate_table[candidate_table$Annotations != "NA",]
+    ),
+    candidate_table_flagged_html = target(prepare_candidate_table_html(candidate_table_flagged)),
+
+    # Exploratory Graphs -------------------------------------------------------
+
+    plot1 = target(plot1_hitfreq(data_annotated_rbind, !!data_types)),
+    plot2 = target(plot2_hitscore(data_annotated_rbind, !!data_types)),
+      #(!) try geom_count instead of geom_jitter
+      #(!) plot 2 used to have log scale but then lose values of 0.
+    plot3 = target(plot3_pval(data_annotated_rbind, !!data_types)),
+
+    # Clustergram --------------------------------------------------------------
+
+    clustergram_rawdata = target(
+      prepare_clustergram_data(
+        case_rcp, data_annotated_rbind, !!binarize_clustergram, !!rcp_thresh,
+        !!sample_field_delimiter, !!sample_key_field)
+    ),
+
+    clustergram1 = target(
+      generate_clustergram(clustergram_rawdata) # (!) return list
+      #first element is plot, second is sorted spreadsheet
+    ),
+
+    #(!) work on clustergram formatting. peptide/sample name sizes, etc.
 
 
-    # annotate_genes_list()
-    #     # take input of (1) input field name (pep_id etc.), (2) output field names c(gene, product, pep_pos?) or c(uniprot_acc, product). (3) delimiter / spearators
-
-    # annotate_flags_list()
-    #     # c(autoantigen, cell surface protein, virus, etc.). (2) asis flag (if fasle don't copy exact text, just print category name) . virscan uniprot genus etc.
-
-    # choose_pval_list()
-    #     # take min/max/specified pval if multiple peptides
-
-    # prepare_candidate_tables_list()
-    # rename header prep kable etc.
-
-    # (!) filter hits, annotate hits, format table
-    # (!) return list of the possible tables. named.
-    #(!) multipval is for collapsing to protein
-
-    #(!) need to add flag to handle polyclonal and promax differently.
-
-
-    # --------------------------------------------------------------------------
-    # Exploratory Graphs
-
-    # plot1_hitfreq()
-
-    # plot2_hitscore()
-
-    # plot3_pval()
-
-
-
-    # --------------------------------------------------------------------------
-    # Clustergram
-
-    # heatmap_generate() # return static and interactive as list?
-
-
-    # --------------------------------------------------------------------------
-    # eptiopefindr
+    # eptiopefindr -------------------------------------------------------------
     #(!) include old output table?
 
-    # run_epitopefindr()
+    write_hits_fasta = target(
+      epitopefindr::writeFastaAA(
+        data.frame(ID = paste(data_annotated_rbind$Protein,
+                              data_annotated_rbind$Peptide, sep = "_"),
+                   Seq = data_annotated_rbind$pep_aa) %>% na.omit,
+        file_out("data/hits.fasta")
+      )
+    ),
+
+    run_epitopefindr = target({
+      epitopefindr::epfind(
+        data = file_in("data/hits.fasta"),
+        output.dir = "data/epitopefindr/",
+        make.png = TRUE)
+      file_out("data/epitopefindr/epitopeSummary.csv")
+    }),
+
+    # Epitope Clustergram ------------------------------------------------------
+
+    epitope_clustergram_rawdata = target(
+      prepare_epitope_clustergram_data(
+        clustergram1[[3]],
+        file_in("data/epitopefindr/epitopeSummary.csv")
+      )
+    ),
+
+    clustergram2 = target(
+      generate_clustergram(epitope_clustergram_rawdata)
+    ),
+
+
 
     # --------------------------------------------------------------------------
-    # Epitope Clustergram
 
-    # epitope_heatmap_generate()
-
-    # --------------------------------------------------------------------------
-
-    #(!) these steps need to be tidyeval'ed for each input file type
-    #(!) how does this work with input_files list?
-
-    # write outputs including relevant paths
     #(!) add write_target with file_out for every data generating step.
-    #  ^ (!) write to /data/ for tidiness
+    #  ^ (!) write to /data/ for tidiness?
+    # (!) need to add filename-generating section
 
     blank_final_target = target()
 

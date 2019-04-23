@@ -6,7 +6,7 @@
 calculations on the data such as hit frequency and Fisher's test. These
 calculations will be used in subsequent graphing.}
 \usage{
-StatsGenerator(case, ctrl, case_rcp, ctrl_rcp, enrichment_thresh = 10,
+StatsGenerator(case, ctrl, case_rcp, ctrl_rcp, hit_thresh = 10,
   rcp_thresh = 0.95, stat_test = "Fisher", pval_correction = "BH",
   note_range = 1)
 }
@@ -19,7 +19,7 @@ StatsGenerator(case, ctrl, case_rcp, ctrl_rcp, enrichment_thresh = 10,
 
 \item{ctrl_rcp}{Control RCP data}
 
-\item{enrichment_thresh}{Enrichment hit threshold.}
+\item{hit_thresh}{Enrichment hit threshold.}
 
 \item{rcp_thresh}{RCP hit threshold.}
 

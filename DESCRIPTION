@@ -1,12 +1,27 @@
 Package: phipcc
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Generate Case-Control Reports from PhIP-seq Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Brandon Sie
+Maintainer: Brandon Sie <brandonsie@gmail.com>
+Description: Process case/control data to perform exploratory data analysis, statistical comparison, hierarchical clustering of promising candidates, and BLAST-based epitope analysis.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Imports:
+  phipmake,
+  drake,
+  data.table,
+  magrittr,
+  dplyr,
+  drake,
+  ggplot2,
+  plotly,
+  heatmaply,
+  ggdendro,
+  knitr,
+  kableExtra,
+  gplots,
+  stats,
+  epitopefindr

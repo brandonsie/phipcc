@@ -9,5 +9,5 @@ config_case_control(case_names = c(), ctrl_names = c(),
   rcp_thresh = 10, annot_path = c(), epf_params = c())
 }
 \description{
-setup configurations for this case control study
+Needs update.
 }

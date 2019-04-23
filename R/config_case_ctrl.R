@@ -1,5 +1,7 @@
 #' setup configurations for this case control study
 #'
+#' Needs update.
+#'
 #' @export
 
 
@@ -14,9 +16,5 @@ config_case_control <- function(
 ){
 
 
-  #prepare data fram
-
-
-  # write & return
 
 }

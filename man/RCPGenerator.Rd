@@ -9,12 +9,22 @@ of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
 assigned an RCP of 0.25, because 5.0 is higher than 25% of the control
 population. In this implementation, ties count as losses.}
 \usage{
-RCPGenerator(case, ctrl, verbose = FALSE)
+RCPGenerator(case, ctrl, min_hits = 0, hit_thresh = 0,
+  verbose = FALSE)
 }
 \arguments{
 \item{case}{Data frame of cases.}
 
 \item{ctrl}{Data frame of controls.}
+
+\item{min_hits}{Numeric, hreshold for number of cases scoring above hit_thresh in
+original score required to be retained after filtering. By default, min_hits
+is set to 0 and thus RCP is calculated for all peptides. Setting a nonzero
+value for min_hits is only recommended if calculating RCP for all peptides
+is prohibitively slow.}
+
+\item{hit_thresh}{Vector of numeric, threshold value to apply when considering min_hits.
+hit_thresh is only evaluated if min_hits > 0.}
 
 \item{verbose}{Logical to print status updates to console.}
 }

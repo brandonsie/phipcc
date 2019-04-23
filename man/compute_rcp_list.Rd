@@ -4,12 +4,21 @@
 \alias{compute_rcp_list}
 \title{Calculate relative control percentile statistic for a list of data.}
 \usage{
-compute_rcp_list(case, ctrl)
+compute_rcp_list(case, ctrl, min_hits = 0, hit_thresh = 0)
 }
 \arguments{
 \item{case}{Case samples for which to compute RCP.}
 
 \item{ctrl}{Control samples to compute RCP against.}
+
+\item{min_hits}{Numeric, hreshold for number of cases scoring above hit_thresh in
+original score required to be retained after filtering. By default, min_hits
+is set to 0 and thus RCP is calculated for all peptides. Setting a nonzero
+value for min_hits is only recommended if calculating RCP for all peptides
+is prohibitively slow.}
+
+\item{hit_thresh}{Vector of numeric, threshold value to apply when considering min_hits.
+hit_thresh is only evaluated if min_hits > 0.}
 }
 \description{
 Case and control should be lists of the same length. Each element of the list

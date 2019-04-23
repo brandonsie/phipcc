@@ -4,8 +4,8 @@
 \alias{compute_stats_list}
 \title{calculate statistics for list of data}
 \usage{
-compute_stats_list(case, ctrl, case_rcp, ctrl_rcp, enrichment_thresh,
-  rcp_thresh, stat_test = "Fisher", pval_correction = "BH")
+compute_stats_list(case, ctrl, case_rcp, ctrl_rcp, hit_thresh, rcp_thresh,
+  stat_test = "Fisher", pval_correction = "BH")
 }
 \arguments{
 \item{case}{Case data list.}
@@ -16,7 +16,7 @@ compute_stats_list(case, ctrl, case_rcp, ctrl_rcp, enrichment_thresh,
 
 \item{ctrl_rcp}{Control RCP data list.}
 
-\item{enrichment_thresh}{Enrichment hit threshold.}
+\item{hit_thresh}{Enrichment hit threshold.}
 
 \item{rcp_thresh}{RCP hit threshold.}
 

@@ -9,63 +9,263 @@ output:
 editor_options: 
   chunk_output_type: inline
 params:
+  set_title: "Test"
   config: NULL
-  candidates: NULL
+  candidate_table_flagged: NULL
+  candidate_table_full: NULL
   graphs: NULL
-  clusters: NULL
+  cluster1: NULL
   motifs: NULL
+  cluster2: NULL
+title: "`r params$set_title`"
 ---
 
 
-# I. Introduction <font size="1"><a href="#top">[Top]</a></font> {.tabset}
+# I. Introduction {.tabset}
 
-## Report Overview
+## Report Overview  
 
-```{r}
+This report compares the data of our case population (__`r phipmake::getparam(config, "proj_id")`, n = `r phipmake::getparam(config, "case_names") %>% strsplit(phipmake::getparam(config, "delimiter")) %>% unlist %>% length`__)
+against that of a control population (__`r phipmake::getparam(config, "ctrl_id")`, n = `r phipmake::getparam(config, "ctrl_names") %>% strsplit(phipmake::getparam(config, "delimiter")) %>% unlist %>% length`__)
+to generate a list of candidate antigens from the __`r phipmake::getparam(config, "library")`__ library.
 
-#get proj_id etc. from params$config.
-#document case samples and control samples
-#explain sample subsetting, RCP calculation (dplyr?), statistical calcs (plotdata)
+## Navigating this Document  
 
-```
+* Table of Contents on the Left  
+* Interactive Plots  
+* Folded Code  
+* Tabbed section  
 
-## Config Documentation
+## Config Documentation  
 
-```{r}
+```{r Config Documentation}
 
-#document params$config
-
-```
-
-# II. Candidate Antigen Tables <font size="1"><a href="#top">[Top]</a></font>
-
-```{r}
-
-#precompute candidate antigen table and annotations
+knitr::kable(config) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+  kableExtra::column_spec(2, width = "10em")
 
 ```
 
-# III. Exploratory Analysis <font size="1"><a href="#top">[Top]</a></font>
 
-```{r}
-#precompute the 3 plots
+# II. Candidate Antigen Tables {.tabset}  
+<font size="1"><a href="#top">[Top]</a></font>  
+
+From a BH-corrected Fisher's Exact test.
+
+## Annotated  
+Known associations in our database. (e.g. autoantigens, surface proteins, ...)  
+```{r Candidate Table 1}
+
+
+border <- "1px solid gray"
+scroll_height <- "1000px"
+use_scrollbox <- FALSE
+
+flag_table <- params$candidate_table_flagged
+if(nrow(flag_table) > 17) use_scrollbox <- TRUE
+
+flag_table <- flag_table %>%
+    knitr::kable(
+      format = "html", escape = FALSE,
+      caption = "Annotated Candidate Antigens", row.names = FALSE) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+    kableExtra::add_header_above(
+      c(" " = 4, "Hit Freq" = 2,"Median Hit Score" = 2," " = 1)) %>%
+     kableExtra::column_spec(1,border_left = border) %>%
+     kableExtra::column_spec(ncol(flag_table), border_right = border) %>%
+     kableExtra::column_spec(c(1:4,6,8), border_right = border) 
+
+if(use_scrollbox){
+  flag_table <- flag_table %>% kableExtra::scroll_box(height = scroll_height)
+}
+
+flag_table
 
 ```
 
-# IV. Hit Clustering <font size="1"><a href="#top">[Top]</a></font>
+## All Hits  
+```{r Candidate Table 2}
 
-```{r}
-#precompute clustergram 1
-# precompute epitopefindr
-# precompute epitope clustergram
+
+full_table <- params$candidate_table_full
+if(nrow(full_table) > 17) use_scrollbox <- TRUE
+
+  # (!) add this to markdown report
+  # (!) kable is knitr. specify other functions too
+
+full_table <- full_table %>%
+    knitr::kable(
+      format = "html", escape = FALSE,
+      caption = "All Candidate Antigens", row.names = FALSE) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+    kableExtra::add_header_above(
+      c(" " = 4, "Hit Freq" = 2,"Median Hit Score" = 2," " = 1)) %>%
+     kableExtra::column_spec(1,border_left = border) %>%
+     kableExtra::column_spec(ncol(full_table), border_right = border) %>%
+     kableExtra::column_spec(c(1:4,6,8), border_right = border)
+
+if(use_scrollbox){
+  full_table <- full_table %>% kableExtra::scroll_box(height = scroll_height)
+}
+
+full_table
 
 ```
 
-# V. Epitope Motifs <font size="1"><a href="#top">[Top]</a></font> {.tabset}
 
-```{r}
+
+# III. Exploratory Analysis {.tabset}    
+<font size="1"><a href="#top">[Top]</a></font>  
+
+
+## Hit Frequency vs. Hit Score in Cases
+```{r Plot 1}
+plotly::ggplotly(graphs[[1]])
+```
+
+##  Median Hit Score, Cases vs. Controls
+```{r Plot 2}
+plotly::ggplotly(graphs[[2]])
+```
+
+## P-Value vs. Median Case Hit Score
+```{r Plot 3}
+plotly::ggplotly(graphs[[3]])
+```
+
+
+
+# IV. Hit Clustering {.tabset}  
+<font size="1"><a href="#top">[Top]</a></font>  
+
+## Clustergram
+
+```{r Clustergram 1, fig.width = 9, fig.height = 9}
+clustergram_sorted <- params$cluster1[[3]]
+ncolors <- 2
+my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
+
+
+ heatmaply::heatmaply(
+    clustergram_sorted,
+    main = paste("Candidate Antigen Clustergram"),
+    colors = my_palette,
+    fontsize_row = 8,
+    fontsize_col = 8,
+    column_text_angle = 90,
+    margins = c(65, 120),
+    trace = "both",
+    tracecol = "grey",
+    Rowv = FALSE,
+    Colv = FALSE,
+    grid_gap = 1,
+    hide_colorbar = TRUE)
+ 
+```
+
+
+## Row (Peptide) Dendrogram
+```{r Row Dendrogram 1, fig.width = 9, fig.height = 9}
+row_dendrogram <- params$cluster1[[1]]$rowDendrogram
+
+g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
+  ggplot2::theme(axis.text.y = element_text(size = 8)) 
+plotly::ggplotly(g)
+
+```
+
+## Column (Sample) Dendrogram
+```{r Col Dendrogram 1, fig.width = 9, fig.height = 9}
+col_dendrogram <- params$cluster1[[1]]$colDendrogram
+
+g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
+  ggplot2::theme(axis.text.y = element_text(size = 8)) 
+plotly::ggplotly(g)
+
+```
+
+
+# V. Epitope Clustering   
+<font size="1"><a href="#top">[Top]</a></font>  
+
+## epitopefindr Motifs {.tabset}  
+Ran epitopefinder, got these motifs
+<!-- (!) Also need to print output table  -->
+
+```{r Print Motifs, fig.height = 4, echo = FALSE, message = FALSE, results = "asis"}
+
 #print precomputed motifs
+# msa_path <- "data/epitopefindr/intermediate_files/msa/"
+msa_path <- params$motifs
+msa_name <- paste0(msa_path, "msa.pdf")
+num_page <- pdftools::pdf_info(msa_name)$pages
+num_length <- nchar(num_page)
+
+for(i in 1:num_page){
+  num_padded <- formatC(i, width = num_length, flag = "0")
+  png_name <- paste0(msa_path, "msa-", num_padded, ".png")
+
+  		cat("  \n### MSA",  i, "  \n")
+		for(j in 1:length(png_name)){
+  		cat("![](",png_name[j],")",sep="")
+		  # png_name[j] %>% (EBImage::readImage) %>% (EBImage::display)
+		}
+		cat("  \n  \n")
+
+
+}
+
+
 ```
+
+
+## Epitope-Collapsed Hit Clustering {.tabset}
+
+### Epitope Clustergram
+```{r Clustergram 2, fig.width = 9, fig.height = 9}
+clustergram_sorted <- params$cluster2[[3]]
+ncolors <- 2
+my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
+
+
+ heatmaply::heatmaply(
+    clustergram_sorted,
+    main = paste("Candidate Antigen Clustergram (Epitope-Collapsed)"),
+    colors = my_palette,
+    fontsize_row = 8,
+    fontsize_col = 8,
+    column_text_angle = 90,
+    margins = c(65, 120),
+    trace = "both",
+    tracecol = "grey",
+    Rowv = FALSE,
+    Colv = FALSE,
+    grid_gap = 1,
+    hide_colorbar = TRUE)
+
+```
+
+### Row (Peptide/Epitope) Clustergram
+```{r Row Dendrogram 2, fig.width = 9, fig.height = 9}
+row_dendrogram <- params$cluster2[[1]]$rowDendrogram
+
+g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
+  ggplot2::theme(axis.text.y = element_text(size = 8)) 
+plotly::ggplotly(g)
+
+```
+
+
+### Column (Sample) Clustergram
+```{r Col Dendrogram 2, fig.width = 9, fig.height = 9}
+col_dendrogram <- params$cluster2[[1]]$colDendrogram
+
+g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
+  ggplot2::theme(axis.text.y = element_text(size = 8)) 
+plotly::ggplotly(g)
+
+```
+
 
 
 <!-- 

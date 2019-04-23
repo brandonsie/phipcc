@@ -6,7 +6,7 @@
 #' @param ctrl Control data
 #' @param case_rcp Case RCP data
 #' @param ctrl_rcp Control RCP data
-#' @param enrichment_thresh Enrichment hit threshold.
+#' @param hit_thresh Enrichment hit threshold.
 #' @param rcp_thresh RCP hit threshold.
 #' @param stat_test Statistical test. Currently supports "Fisher"
 #' @param pval_correction Multiple hypothesis pvalue correction method. BH default.
@@ -15,11 +15,11 @@
 #
 # output_data[[i]] <- StatsGenerator(
 #   case[[i]], ctrl[[i]], case_rcp[[i]], ctrl_rcp[[i]],
-#   enrichment_thresh, rcp_thresh, stat_test, pval_correction)
+#   hit_thresh, rcp_thresh, stat_test, pval_correction)
 
 
 StatsGenerator <- function(
-  case, ctrl, case_rcp, ctrl_rcp, enrichment_thresh = 10, rcp_thresh = 0.95,
+  case, ctrl, case_rcp, ctrl_rcp, hit_thresh = 10, rcp_thresh = 0.95,
   stat_test = "Fisher", pval_correction = "BH", note_range = 1) {
 
   data <- data.frame(id = case_rcp[,note_range])
@@ -30,9 +30,9 @@ StatsGenerator <- function(
 
   #Raw HitS
   data$Case.Hits <-apply(case[,-note_range],1,
-                         function(x) sum(as.numeric(x)>=enrichment_thresh))
+                         function(x) sum(as.numeric(x)>=hit_thresh))
   data$Ctrl.Hits <-apply(ctrl[,-note_range],1,
-                         function(x) sum(as.numeric(x)>=enrichment_thresh))
+                         function(x) sum(as.numeric(x)>=hit_thresh))
   data$Case.Hit.Freq <- as.numeric(data$Case.Hits) / num.cases
   data$Ctrl.Hit.Freq <- as.numeric(data$Ctrl.Hits) / num.ctrls
 
@@ -91,7 +91,7 @@ StatsGenerator <- function(
                           c(data$RCP.Hits.Ctrl[x],
                             num.ctrls-data$RCP.Hits.Ctrl[x]))))
     })))
-    data$Fisher.PValue2 <- p.adjust(as.numeric(ft2$p.value),method= pval_correction)
+    data$Fisher.PValue2 <- p.adjust(as.numeric(ft2$p.value),method = pval_correction)
 
     data$PValue.Min <-
       apply(data[,c("Fisher.PValue","Fisher.PValue2")],1,min)
