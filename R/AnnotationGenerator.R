@@ -2,6 +2,7 @@
 #'
 #' @param data Input data frame.
 #' @param data_level If data_level is "peptide", then AnnotationGenerator will operate based on the peptide_ parameters. If data_level is "protein", then Annotation_Generator will operate based on the protein_ parameters.
+#' @param data_types Character vector describing types of data stored in data list. e.g. "zscore", "polyclonal".
 #' @param annot Library annotation file with named columns.
 #' @param peptide_col_id_match For data_level=="peptide", the name of a column in annot that corresponds to the first column of data.
 #' @param protein_col_id_match For data_level=="protein", the name of a column in annot that corresponds to the first column of data.
@@ -15,7 +16,7 @@
 
 
 AnnotationGenerator <- function(
-  data, data_level, annot, peptide_col_id_match, protein_col_id_match,
+  data, data_level, data_types, annot, peptide_col_id_match, protein_col_id_match,
   peptide_col_id_display, protein_col_id_display, description_col_id, flag_col_id,
   pep_aa = "pep_aa"
 ){
@@ -29,6 +30,7 @@ AnnotationGenerator <- function(
     data$Peptide <- annot[match(data[,1], annot[,peptide_col_id_match]),
                               peptide_col_id_display]
 
+    data$ProteinPeptide <- paste(data$Protein, data$Peptide, sep = "|")
 
     flags <- annot[match(data[,1], annot[,peptide_col_id_match]), flag_col_id]
 
@@ -38,12 +40,30 @@ AnnotationGenerator <- function(
                           protein_col_id_display]
     data$Peptide <- "NA"
 
-    flags <- annot[match(data[,1], annot[,protein_col_id_match]), flag_col_id]
+    data$ProteinPeptide <- paste(data$Protein, data_types, sep = "|")
 
+    flags <- annot[match(data[,1], annot[,protein_col_id_match]), flag_col_id]
 
 
   } else{stop("Invalid data_level passed to AnnotationGenerator.")}
 
+  # Deal with duplicate names
+
+  duplicateProPep <- data$ProteinPeptide[duplicated(data$ProteinPeptide)]
+  if(length(duplicateProPep) > 0){
+    for(i in 1:length(duplicateProPep)){ #for each duplicate ID
+      #count occurances
+      dup_occurances <- length(with(data, ProteinPeptide[ProteinPeptide == duplicateProPep[i]]))
+
+      #take rows with matching ID
+      #rename sequentailly with suffix ".1", ".2", etc.
+      data$ProteinPeptide[data$ProteinPeptide == duplicateProPep[[i]]] <-
+        paste0(with(data, ProteinPeptide[ProteinPeptide == duplicateProPep[i]]), 1:dup_occurances, sep=".")
+    }
+  }
+
+
+  # Description
 
   data$Description <- annot[match(data$Protein, annot[,protein_col_id_display]),
                             description_col_id]

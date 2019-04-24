@@ -29,14 +29,26 @@ This report compares the data of our case population (__`r phipmake::getparam(co
 against that of a control population (__`r phipmake::getparam(config, "ctrl_id")`, n = `r phipmake::getparam(config, "ctrl_names") %>% strsplit(phipmake::getparam(config, "delimiter")) %>% unlist %>% length`__)
 to generate a list of candidate antigens from the __`r phipmake::getparam(config, "library")`__ library.
 
+For each of these samples, we performed [PhIP-Seq](https://www.nature.com/articles/s41596-018-0025-6) to measure antibody response against our libraries of phage displayed peptides. 
+
+### Types of summary statistics used in this analysis  
+
+* Z-score describes normalized enrichment based on next-gen sequencing reads. Z > 10 suggests a "hit".
+* Promax is a protein-level metric indicating the highest zscore among the peptide fragments for a given protein.  
+* Polyclonal indicates the number of non-overlapping peptide fragments of a given protein that produce z-score hit. 
+* RCP (Relative Control Percentile) is the fraction of controls that score lower than a given case for a given peptide/protein.
+ 
+
 ## Navigating this Document  
 
-* Table of Contents on the Left  
-* Interactive Plots  
-* Folded Code  
-* Tabbed section  
+* The table of contents on the left side of the document can be used to jump between sections.  
+* The plots and heatmaps in this document are made interactive using [`plotly`](https://plot.ly/r/). This means you can mousover points for more information, drag to zoom (double click to zoom out), and select/deselect data subsets in the legend.  
+* Sections of this report are often subdivided with tabs. Clicking on a tab will reveal the corresponding report section.  
+* The code used to generate this report can be viewed by expanding the `Code` buttons along the right side of the document. However, this document relies on pre-computation usin the [`phipmake`](https://github.com/brandonsie/phipmake) and [`phipcc`](https://github.com/brandonsie/phipcc) packages from Github.     
 
 ## Config Documentation  
+
+These are the configuration parameters that were fed into `drake::make(phipcc::define_plan_case_control)`.  
 
 ```{r Config Documentation}
 
@@ -47,13 +59,31 @@ knitr::kable(config) %>%
 ```
 
 
+## Technical Documentation
+
+```{r}
+sessionInfo()
+```
+
+
+
 # II. Candidate Antigen Tables {.tabset}  
 <font size="1"><a href="#top">[Top]</a></font>  
 
-From a BH-corrected Fisher's Exact test.
+After standard post-processing of the assay sequencing data to generate enrichment scores, we perform Fisher's exact test to compare the scores of cases vs. controls for each peptide & protein. The p values from this Fisher's test are corrected using Benjamini & Hochberg method (BH).
+
+We now take a subset of peptides/proteins for which:  
+
+* at least `r config$value[config$param == "min_hits_enrichment"]` cases exhibit an enrichment score (`r config$value[config$param == "data_types"]`) above threshold (`r config$value[config$param == "hit_thresh"]`),
+* the cases exhibit a hit frequency higher than that of the controls,   
+* the larger of (i) n = `r config$vlaue[config$param == "min_hits_rcp"]` or (ii) `r config$vlaue[config$param == "min_freq_hits_rcp"] * 100`% rounded up) of cases scored above the 95th percentile of the control population,
+* Fisher's exact test gives a BH-corrected p value < `r config$vlaue[config$param == "pval_thresh"]` comparing case and controls against our traditional data thresholds and against an RCP threshold of 0.95.   
+
 
 ## Annotated  
-Known associations in our database. (e.g. autoantigens, surface proteins, ...)  
+
+This table represents candidate antigens with known associations in our database. (e.g. autoantigens, surface proteins). Click to the next tab to see all hits.   
+
 ```{r Candidate Table 1}
 
 
@@ -117,18 +147,29 @@ full_table
 # III. Exploratory Analysis {.tabset}    
 <font size="1"><a href="#top">[Top]</a></font>  
 
+We can continue to explore this data via some graphs. Note these plots are interactive. You can click on the legend to enable/disable different traces, and you can drag a box around regions of the graph to zoom in.
+
 
 ## Hit Frequency vs. Hit Score in Cases
+
+We define a "hit" as scoring above the 95th percentile of the control population (RCP>0.95). Among our case samples, we plot the hit frequency among cases against the median score of these hits.
+
 ```{r Plot 1}
 plotly::ggplotly(graphs[[1]])
 ```
 
 ##  Median Hit Score, Cases vs. Controls
+
+Based on our definition of hit, there are always ~5% of controls that also score as a hit for any given peptide or protein. Here we plot the median score of hits among cases against the median score of hits among controls.
+
 ```{r Plot 2}
 plotly::ggplotly(graphs[[2]])
 ```
 
 ## P-Value vs. Median Case Hit Score
+
+As mentioned earlier, we perform a Fisher's exact test comparing the number of hits in cases vs. controls and perform a Benjamini-Hochberg correction of the p values from this test. Here we plot the negative log base 10 of these corrected p values against the median score of hits among cases.
+
 ```{r Plot 3}
 plotly::ggplotly(graphs[[3]])
 ```
@@ -139,6 +180,8 @@ plotly::ggplotly(graphs[[3]])
 <font size="1"><a href="#top">[Top]</a></font>  
 
 ## Clustergram
+
+I produce a clustergram of these hits using Ward's method for agglomeration. Each row corresponds to a peptide or protein from our filtered hit table and each column corresponds to a case sample. Squares shaded in black indicate an RCP hit, meaning that the sample scored above the 95th percentile of the control population for that peptide or protein. The dendrograms from this clustering are displayed on the following tabs.
 
 ```{r Clustergram 1, fig.width = 9, fig.height = 9}
 clustergram_sorted <- params$cluster1[[3]]
@@ -189,7 +232,9 @@ plotly::ggplotly(g)
 <font size="1"><a href="#top">[Top]</a></font>  
 
 ## epitopefindr Motifs {.tabset}  
-Ran epitopefinder, got these motifs
+
+Now we call [epitopefindr](https://github.com/brandonsie/epitopefindr), an R pipeline designed to look for BLAST alignments among these filtered hit peptides. Peptides that share sequences that might be cross-reactively recognized by a single antibody are grouped, and these groups are reclustered along with any peptides that lacked significant alignments. We find evidence for the following motifs.
+
 <!-- (!) Also need to print output table  -->
 
 ```{r Print Motifs, fig.height = 4, echo = FALSE, message = FALSE, results = "asis"}
@@ -222,6 +267,9 @@ for(i in 1:num_page){
 ## Epitope-Collapsed Hit Clustering {.tabset}
 
 ### Epitope Clustergram
+
+We re-cluster, collapsing peptides for which epitopefindr detected possible cross-reactivity into single rows.
+
 ```{r Clustergram 2, fig.width = 9, fig.height = 9}
 clustergram_sorted <- params$cluster2[[3]]
 ncolors <- 2

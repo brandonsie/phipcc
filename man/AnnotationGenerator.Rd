@@ -4,14 +4,17 @@
 \alias{AnnotationGenerator}
 \title{generate case control annotations for hit data based on library annotation file.}
 \usage{
-AnnotationGenerator(data, data_level, annot, peptide_col_id_match,
-  protein_col_id_match, peptide_col_id_display, protein_col_id_display,
-  description_col_id, flag_col_id, pep_aa = "pep_aa")
+AnnotationGenerator(data, data_level, data_types, annot,
+  peptide_col_id_match, protein_col_id_match, peptide_col_id_display,
+  protein_col_id_display, description_col_id, flag_col_id,
+  pep_aa = "pep_aa")
 }
 \arguments{
 \item{data}{Input data frame.}
 
 \item{data_level}{If data_level is "peptide", then AnnotationGenerator will operate based on the peptide_ parameters. If data_level is "protein", then Annotation_Generator will operate based on the protein_ parameters.}
+
+\item{data_types}{Character vector describing types of data stored in data list. e.g. "zscore", "polyclonal".}
 
 \item{annot}{Library annotation file with named columns.}
 

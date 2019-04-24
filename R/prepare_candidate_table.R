@@ -45,7 +45,9 @@ prepare_candidate_table <- function(data){
 
     # Description, Annotations, Data Types Columns
     output_data$Description[i] <- unique(this_data$Description)
-    output_data$Annotations[i] <- unique(this_data$Flags)
+    output_data$Annotations[i] <- paste(
+      this_data$Flags[this_data$Flags != "NA"] %>% unique, collapse = ", "
+    )
     output_data$`Data Types`[i] <- paste(unique(this_data$`Data.Type`),
                                          collapse = ", ")
 

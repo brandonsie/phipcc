@@ -38,13 +38,26 @@ prepare_clustergram_data <- function(
     this_annot <- hit_list[hit_list$Data.Type == rcp_subset$Data.Type[i] &
                              hit_list$id == rcp_subset$ID[i], ]
 
-    if(this_annot$Peptide != "NA"){
-      rownames(rcp_subset)[i] <- paste(this_annot$Protein, this_annot$Peptide,
-                                       sep = "|")
-    } else{
-      rownames(rcp_subset)[i] <- paste(this_annot$Protein, this_annot$Data.Type,
-                                       sep = "|")
-    }
+    #new way
+    this_rowname <- this_annot$ProteinPeptide
+
+    # if(this_annot$Peptide != "NA"){
+    #   this_rowname <- paste(this_annot$Protein, this_annot$Peptide, sep = "|")
+    # } else{
+    #   this_rowname <- paste(this_annot$Protein, this_annot$Data.Type, sep = "|")
+    # }
+
+    # if(this_rowname %in% rownames(rcp_subset)){
+    #   #Fix for redundant protein names
+    #   base_rowname <- this_rowname
+    #   k = 1
+    #   while(this_rowname %in% rownames(rcp_subset)){
+    #     this_rowname <- paste(base_rowname, k, sep = "|")
+    #   }
+    # }
+
+    rownames(rcp_subset)[i] <- this_rowname
+
   }
   # row match id and Data.Type
   # if peptide, take Protein|Tile

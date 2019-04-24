@@ -157,7 +157,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
 
     data_annotated = target(
-      annotate_cc_list(data_filtered, !!data_level, annot,
+      annotate_cc_list(data_filtered, !!data_level, !!data_types, annot,
         !!peptide_col_id_match, !!protein_col_id_match, !!peptide_col_id_display,
         !!protein_col_id_display, !!description_col_id, !!flag_col_id
       )
@@ -168,7 +168,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     candidate_table_html = target(prepare_candidate_table_html(candidate_table)),
 
     candidate_table_flagged = target(
-      candidate_table[candidate_table$Annotations != "NA",]
+      candidate_table[candidate_table$Annotations != "",]
     ),
     candidate_table_flagged_html = target(prepare_candidate_table_html(candidate_table_flagged)),
 
@@ -201,8 +201,9 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     write_hits_fasta = target(
       epitopefindr::writeFastaAA(
-        data.frame(ID = paste(data_annotated_rbind$Protein,
-                              data_annotated_rbind$Peptide, sep = "_"),
+        data.frame(ID = data_annotated_rbind$ProteinPeptide,
+          #ID = paste(data_annotated_rbind$Protein,
+           #                   data_annotated_rbind$Peptide, sep = "|"),
                    Seq = data_annotated_rbind$pep_aa) %>% na.omit,
         file_out("data/hits.fasta")
       )
