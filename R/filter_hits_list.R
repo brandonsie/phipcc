@@ -21,9 +21,20 @@ filter_hits_list <- function(
   for(i in 1:length(data_stats)){
     output_data[[i]] <- filter_hits(
       data_stats[[i]], min_hits_enrichment, min_hits_rcp, pval_thresh, case_over_control)
-    output_data[[i]]$Data.Type <- names(data_stats)[i]
+
+    if(nrow(output_data[[i]]) > 0){
+      output_data[[i]]$Data.Type <- names(data_stats)[i]
+    }
+
     names(output_data)[i] <- names(data_stats)[i]
+
+
   }
+
+  # #remove empty data types
+  # rows_per_type <- sapply(output_data, nrow)
+  # output_data <- output_data[!(rows_per_type==0)]
+
 
   if(bind_rows) output_data <- dplyr::bind_rows(output_data)
 

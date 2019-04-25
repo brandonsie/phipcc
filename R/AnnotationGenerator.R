@@ -10,6 +10,7 @@
 #' @param protein_col_id_display The name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to each protein.
 #' @param description_col_id The name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to gene product or similar short protein descriptions to display in the markdown report.
 #' @param flag_col_id Character string or vector of column  name(s) corresponding to annotation flags to indicate in the markdown report (e.g. of known autoantigens or surface proteins).
+#' @param flag_type type "binary" to detect whether or not there is text in that cell. "literal" to display exact text from cell.
 #' @param pep_aa Character string of column name in annot corresponding to peptide amino acid sequence in the markdown report. Needed for peitopefindr.
 #'
 #' @export
@@ -17,32 +18,34 @@
 
 AnnotationGenerator <- function(
   data, data_level, data_types, annot, peptide_col_id_match, protein_col_id_match,
-  peptide_col_id_display, protein_col_id_display, description_col_id, flag_col_id,
+  peptide_col_id_display, protein_col_id_display, description_col_id, flag_col_id, flag_type,
   pep_aa = "pep_aa"
 ){
 
   # annot <- data.table::fread(annot_path, data.table = FALSE)
 
-
   if(data_level == "peptide"){
     data$Protein <- annot[match(data[,1], annot[,peptide_col_id_match]),
-                          protein_col_id_display]
+                          protein_col_id_display] %>% as.character
     data$Peptide <- annot[match(data[,1], annot[,peptide_col_id_match]),
-                              peptide_col_id_display]
+                              peptide_col_id_display] %>% as.character
+
 
     data$ProteinPeptide <- paste(data$Protein, data$Peptide, sep = "|")
 
-    flags <- annot[match(data[,1], annot[,peptide_col_id_match]), flag_col_id]
+    flags <- data.frame(annot[match(data[,1], annot[,peptide_col_id_match]), flag_col_id])
+    names(flags) <- flag_col_id
 
 
   } else if(data_level == "protein"){
     data$Protein <- annot[match(data[,1], annot[,protein_col_id_match]),
-                          protein_col_id_display]
+                          protein_col_id_display] %>% as.character
     data$Peptide <- "NA"
 
     data$ProteinPeptide <- paste(data$Protein, data_types, sep = "|")
 
-    flags <- annot[match(data[,1], annot[,protein_col_id_match]), flag_col_id]
+    flags <- data.frame(annot[match(data[,1], annot[,protein_col_id_match]), flag_col_id])
+    names(flags) <- flag_col_id
 
 
   } else{stop("Invalid data_level passed to AnnotationGenerator.")}
@@ -66,16 +69,21 @@ AnnotationGenerator <- function(
   # Description
 
   data$Description <- annot[match(data$Protein, annot[,protein_col_id_display]),
-                            description_col_id]
+                            description_col_id] %>% gsub("_", " ", .)
 
   # Prepare Flag annotations
-  flags_simplified <- flags
-  flags_simplified[] <- sapply(1:ncol(flags), function(x){
-    temp <- flags[,x]
-    temp[temp == "NA" | temp == 0 | temp == "0"] <- ""
-    temp[temp != ""] <- names(flags)[x]
-    return(temp)
-  })
+  if(flag_type == "binary"){
+    flags_simplified <- flags
+    flags_simplified[] <- sapply(1:ncol(flags), function(x){
+      temp <- flags[,x]
+      temp[temp == "NA" | temp == 0 | temp == "0"] <- ""
+      temp[temp != ""] <- names(flags)[x]
+      return(temp)
+    })
+  } else{
+    flags_simplified <- flags
+  }
+
 
 
 
@@ -96,8 +104,14 @@ AnnotationGenerator <- function(
   data$Flags <- flags_concat
   data$Key.Flag <- flags_key
 
-  data$pep_aa <- annot[match(data[,1], annot[, peptide_col_id_match]),
-                       pep_aa]
+
+  if(data_level == "peptide"){
+    data$pep_aa <- annot[match(data[,1], annot[, peptide_col_id_match]),
+                         pep_aa]
+
+  } else{
+    data$pep_aa <- NA
+  }
 
 
 

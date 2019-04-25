@@ -51,6 +51,8 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   protein_col_id_display <- phipmake::getparam(config, "protein_col_id_display")
   description_col_id <- phipmake::getparam(config, "description_col_id")
   flag_col_id <- phipmake::getparam(config, "flag_col_id") %>% param_split(delimiter)
+  flag_type <- phipmake::getparam(config, "flag_type") %>% param_split(delimiter)
+
   pep_aa <- phipmake::getparam(config, "pep_aa")
 
   # for clustergram
@@ -97,12 +99,12 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     ),
     #(!) need tidyeval for data.types OR bind_rows
 
-    write_case_data = target(
-      phipmake::write_data(case_data, file_out(!!names.case.data))
-    ),
-    write_ctrl_data = target(
-      phipmake::write_data(ctrl_data, file_out(!!names.ctrl.data))
-    ),
+    # write_case_data = target(
+    #   phipmake::write_data(case_data, file_out(!!names.case.data))
+    # ),
+    # write_ctrl_data = target(
+    #   phipmake::write_data(ctrl_data, file_out(!!names.ctrl.data))
+    # ),
 
     # Compute statistics -------------------------------------------------------
 
@@ -113,12 +115,12 @@ define_plan_case_control <- function(config_name = "config.tsv"){
                        hit_thresh = !!hit_thresh)),
     ctrl_rcp = target(compute_rcp_list(ctrl_data, "self")),
 
-    write_case_rcp = target(
-      phipmake::write_data(case_rcp, file_out(!!names.case.rcp))
-    ),
-    write_ctrl_rcp = target(
-      phipmake::write_data(ctrl_rcp, file_out(!!names.ctrl.rcp))
-    ),
+    # write_case_rcp = target(
+    #   phipmake::write_data(case_rcp, file_out(!!names.case.rcp))
+    # ),
+    # write_ctrl_rcp = target(
+    #   phipmake::write_data(ctrl_rcp, file_out(!!names.ctrl.rcp))
+    # ),
     # write_case_rcp_data = phipmake::write_data(case_rcp_data, "data/case_rcp_data.tsv"),
     # write_ctrl_rcp_data = phipmake::write_data(ctrl_rcp_data, "data/ctrl_rcp_data.tsv"),
 
@@ -157,9 +159,9 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
 
     data_annotated = target(
-      annotate_cc_list(data_filtered, !!data_level, !!data_types, annot,
+      annotate_cc_list(data_filtered, !!data_level, annot,
         !!peptide_col_id_match, !!protein_col_id_match, !!peptide_col_id_display,
-        !!protein_col_id_display, !!description_col_id, !!flag_col_id
+        !!protein_col_id_display, !!description_col_id, !!flag_col_id, !!flag_type
       )
     ),
 

@@ -70,13 +70,14 @@ sessionInfo()
 # II. Candidate Antigen Tables {.tabset}  
 <font size="1"><a href="#top">[Top]</a></font>  
 
+
 After standard post-processing of the assay sequencing data to generate enrichment scores, we perform Fisher's exact test to compare the scores of cases vs. controls for each peptide & protein. The p values from this Fisher's test are corrected using Benjamini & Hochberg method (BH).
 
 We now take a subset of peptides/proteins for which:  
 
 * at least `r config$value[config$param == "min_hits_enrichment"]` cases exhibit an enrichment score (`r config$value[config$param == "data_types"]`) above threshold (`r config$value[config$param == "hit_thresh"]`),
 * the cases exhibit a hit frequency higher than that of the controls,   
-* the larger of (i) n = `r config$vlaue[config$param == "min_hits_rcp"]` or (ii) `r config$vlaue[config$param == "min_freq_hits_rcp"] * 100`% rounded up) of cases scored above the 95th percentile of the control population,
+* The larger of (i) n = `r config$value[config$param == "min_hits_rcp"]` or (ii) `r as.numeric(config$value[config$param == "min_freq_hits_rcp"]) * 100`% rounded up of cases scored above the 95th percentile of the control population,  
 * Fisher's exact test gives a BH-corrected p value < `r config$vlaue[config$param == "pval_thresh"]` comparing case and controls against our traditional data thresholds and against an RCP threshold of 0.95.   
 
 

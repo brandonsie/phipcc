@@ -17,8 +17,12 @@ prepare_clustergram_data <- function(
   sample_field_delimiter = ".", sample_key_field = 4){
 
   # Subset Case RCP data
+  for(i in 1:length(case_rcp)){
+    colnames(case_rcp[[i]])[1] <- "ID"
+  }
+
   rcp_rbind <- dplyr::bind_rows(case_rcp, .id = "Data.Type")
-  names(rcp_rbind)[2] <- "ID"
+  # names(rcp_rbind)[2] <- "ID"
 
   rcp_subset <- rcp_rbind[rcp_rbind$ID %in% hit_list$id, ]
   rcp_subset <- rcp_subset[paste0(rcp_subset$Data.Type, rcp_subset$ID) %in%
