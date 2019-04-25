@@ -30,12 +30,18 @@ graphs <- list(readd(plot1), readd(plot2), readd(plot3))
 cluster1 <- readd(clustergram1)
 cluster2 <- readd(clustergram2)
 
+
+msa_dir <- paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/")
+
+proj_id <- config$value[config$param == "proj_id"]
+library <- config$value[config$param == "library"]
+
 phipcc::render_from_template(
-  set_title = paste0(
-    config$value[config$param == "proj_id"],
-    " PhIP-Seq Case-Control Report: ",
-    config$value[config$param == "library"],
-    " Library"
+  output_file = 
+    paste0(format(Sys.Date(),"%Y%m%d"), "_", proj_id, "_", library,
+           "_CaseControl_Report.html"),
+  set_title = paste0(proj_id, " PhIP-Seq Case-Control Report: ", 
+                     library, " Library"
   ),
   config = config,
   candidate_table_flagged = candidate_table_flagged,
@@ -43,8 +49,9 @@ phipcc::render_from_template(
   graphs = graphs,
   cluster1 = cluster1,
   # motifs = "D:/RData/cc_test_1/data/epitopefindr/intermediate_files/msa/",
-  motifs = paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/")
+  motifs = msa_dir,
   cluster2 = cluster2
 )
+
 ```
 
