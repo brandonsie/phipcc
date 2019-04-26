@@ -31,9 +31,9 @@ filter_hits_list <- function(
 
   }
 
-  # #remove empty data types
-  # rows_per_type <- sapply(output_data, nrow)
-  # output_data <- output_data[!(rows_per_type==0)]
+  #remove empty data types
+  rows_per_type <- sapply(output_data, nrow)
+  output_data <- output_data[!(rows_per_type==0)]
 
 
   if(bind_rows) output_data <- dplyr::bind_rows(output_data)

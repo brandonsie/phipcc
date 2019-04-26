@@ -61,7 +61,8 @@ AnnotationGenerator <- function(
       #take rows with matching ID
       #rename sequentailly with suffix ".1", ".2", etc.
       data$ProteinPeptide[data$ProteinPeptide == duplicateProPep[[i]]] <-
-        paste0(with(data, ProteinPeptide[ProteinPeptide == duplicateProPep[i]]), 1:dup_occurances, sep=".")
+        # paste0(with(data, ProteinPeptide[ProteinPeptide == duplicateProPep[i]]), 1:dup_occurances, sep=".")
+        paste(duplicateProPep[i], 1:dup_occurances, sep=".")
     }
   }
 

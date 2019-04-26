@@ -155,7 +155,7 @@ We can continue to explore this data via some graphs. Note these plots are inter
 
 We define a "hit" as scoring above the 95th percentile of the control population (RCP>0.95). Among our case samples, we plot the hit frequency among cases against the median score of these hits.
 
-```{r Plot 1}
+```{r Plot 1, fig.width = 9}
 plotly::ggplotly(graphs[[1]])
 ```
 
@@ -163,7 +163,7 @@ plotly::ggplotly(graphs[[1]])
 
 Based on our definition of hit, there are always ~5% of controls that also score as a hit for any given peptide or protein. Here we plot the median score of hits among cases against the median score of hits among controls.
 
-```{r Plot 2}
+```{r Plot 2, fig.width = 9}
 plotly::ggplotly(graphs[[2]])
 ```
 
@@ -171,7 +171,7 @@ plotly::ggplotly(graphs[[2]])
 
 As mentioned earlier, we perform a Fisher's exact test comparing the number of hits in cases vs. controls and perform a Benjamini-Hochberg correction of the p values from this test. Here we plot the negative log base 10 of these corrected p values against the median score of hits among cases.
 
-```{r Plot 3}
+```{r Plot 3, fig.width = 9}
 plotly::ggplotly(graphs[[3]])
 ```
 
@@ -186,12 +186,13 @@ I produce a clustergram of these hits using Ward's method for agglomeration. Eac
 
 ```{r Clustergram 1, fig.width = 9, fig.height = 9}
 clustergram_sorted <- params$cluster1[[3]]
+htext <- params$cluster1[[2]]
 ncolors <- 2
 my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 
 
  heatmaply::heatmaply(
-    clustergram_sorted,
+    clustergram_sorted, custom_hovertext = htext,
     main = paste("Candidate Antigen Clustergram"),
     colors = my_palette,
     fontsize_row = 8,
@@ -208,25 +209,34 @@ my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 ```
 
 
+
+
 ## Row (Peptide) Dendrogram
 ```{r Row Dendrogram 1, fig.width = 9, fig.height = 9}
 row_dendrogram <- params$cluster1[[1]]$rowDendrogram
+library(plotly)
 
 g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
-  ggplot2::theme(axis.text.y = element_text(size = 8)) 
-plotly::ggplotly(g)
+  ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8))
+# plotly::ggplotly(g)
+g
 
 ```
+
+
 
 ## Column (Sample) Dendrogram
 ```{r Col Dendrogram 1, fig.width = 9, fig.height = 9}
 col_dendrogram <- params$cluster1[[1]]$colDendrogram
 
 g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
-  ggplot2::theme(axis.text.y = element_text(size = 8)) 
-plotly::ggplotly(g)
+  ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8))
+# plotly::ggplotly(g)
+g
 
 ```
+
+
 
 
 # V. Epitope Clustering   
@@ -273,12 +283,13 @@ We re-cluster, collapsing peptides for which epitopefindr detected possible cros
 
 ```{r Clustergram 2, fig.width = 9, fig.height = 9}
 clustergram_sorted <- params$cluster2[[3]]
-ncolors <- 2
+htext <- params$cluster2[[2]]
+ncolors <- 5
 my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 
 
  heatmaply::heatmaply(
-    clustergram_sorted,
+    clustergram_sorted, custom_hovertext = htext,
     main = paste("Candidate Antigen Clustergram (Epitope-Collapsed)"),
     colors = my_palette,
     fontsize_row = 8,
@@ -294,15 +305,20 @@ my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 
 ```
 
+
+
 ### Row (Peptide/Epitope) Clustergram
 ```{r Row Dendrogram 2, fig.width = 9, fig.height = 9}
 row_dendrogram <- params$cluster2[[1]]$rowDendrogram
 
 g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
-  ggplot2::theme(axis.text.y = element_text(size = 8)) 
-plotly::ggplotly(g)
+  ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8)) 
+# plotly::ggplotly(g)
+g
 
 ```
+
+
 
 
 ### Column (Sample) Clustergram
@@ -310,8 +326,9 @@ plotly::ggplotly(g)
 col_dendrogram <- params$cluster2[[1]]$colDendrogram
 
 g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
-  ggplot2::theme(axis.text.y = element_text(size = 8)) 
-plotly::ggplotly(g)
+  ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8)) 
+# plotly::ggplotly(g)
+g
 
 ```
 

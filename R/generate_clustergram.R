@@ -1,12 +1,14 @@
 #' generates clustergram of hits
 #'
-#' @param clustergram_rawdata output from prepare_clustergram_data or prepare_epitope_clustergram_data
+#' @param clustergram_rawdata Output from prepare_clustergram_data or prepare_epitope_clustergram_data
+#' @param data_annotated_rbind Annotated hit list from which to generate custom hovertext.
+#' @param epitopeSummary Optional epitopefindr group annotation output for custom hovertext.
 #' @param ncolors Number of colors to show in clustergram
 #'
 #' @export
 
 
-generate_clustergram <- function(clustergram_rawdata, ncolors = 2){
+generate_clustergram <- function(clustergram_rawdata, data_annotated_rbind, epitopeSummary = NULL, ncolors = 2){
   my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 
   if(!is.null(dev.list())) dev.off()
@@ -38,7 +40,34 @@ generate_clustergram <- function(clustergram_rawdata, ncolors = 2){
   #store sorted heatmap
   clustergram_sorted <- clustergram_rawdata[rev(a$rowInd), a$colInd]
 
-  b <- NA
+
+  # generate custom hovertext
+  hovertext <- matrix(nrow = nrow(clustergram_sorted), ncol = ncol(clustergram_sorted))
+  for(i in 1:nrow(hovertext)){
+    rn <- rownames(clustergram_sorted)[i]
+    if(grepl("\\.[0-9]+$", rn)){gsub("\\.[0-9]+$", "", rn)}
+
+    if(!grepl("^Epitope_[0-9]+$", rn)){
+      #Normal Annotation
+      annot <- data_annotated_rbind$Flags[data_annotated_rbind$ProteinPeptide == rn][1]
+      if(is.na(annot)){
+        hovertext[i,] <- rn
+      } else{
+
+        annot <- paste(annot, collapse = ", ")
+        hovertext[i,] <- paste(rn, "|", annot)
+      }
+
+    } else if(!is.null(epitopeSummary)){
+      #epitopefindr
+      group_id <- gsub("Epitope_", "", rn)
+      members <- epitopeSummary[,1][epitopeSummary[,group_id] != ""]
+      hovertext[i,] <- paste(members, collapse = ", ")
+    }
+
+  }
+
+  b <- NULL
   # library(heatmaply)
   # b <- heatmaply(
   #   clustergram_sorted,
@@ -58,5 +87,5 @@ generate_clustergram <- function(clustergram_rawdata, ncolors = 2){
   # if(!is.null(dev.list())) dev.off()
 
 
-  return(list(a, b, clustergram_sorted))
+  return(list(a, hovertext, clustergram_sorted))
 }

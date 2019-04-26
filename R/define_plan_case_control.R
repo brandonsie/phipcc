@@ -156,6 +156,8 @@ define_plan_case_control <- function(config_name = "config.tsv"){
       # if so then delete that element of data_filtered.
     ),
 
+    filtered_data_types = target(names(data_filtered)),
+
     annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
 
     data_annotated = target(
@@ -176,11 +178,11 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     # Exploratory Graphs -------------------------------------------------------
 
-    plot1 = target(plot1_hitfreq(data_annotated_rbind, !!data_types)),
-    plot2 = target(plot2_hitscore(data_annotated_rbind, !!data_types)),
+    plot1 = target(plot1_hitfreq(data_annotated_rbind, filtered_data_types)),
+    plot2 = target(plot2_hitscore(data_annotated_rbind, filtered_data_types)),
       #(!) try geom_count instead of geom_jitter
       #(!) plot 2 used to have log scale but then lose values of 0.
-    plot3 = target(plot3_pval(data_annotated_rbind, !!data_types)),
+    plot3 = target(plot3_pval(data_annotated_rbind, filtered_data_types)),
 
     # Clustergram --------------------------------------------------------------
 
@@ -191,7 +193,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     ),
 
     clustergram1 = target(
-      generate_clustergram(clustergram_rawdata) # (!) return list
+      generate_clustergram(clustergram_rawdata, data_annotated_rbind) # (!) return list
       #first element is plot, second is sorted spreadsheet
     ),
 
@@ -221,6 +223,12 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     # Epitope Clustergram ------------------------------------------------------
 
+
+    epitopeSummary = target(
+      data.table::fread(file_in("data/epitopefindr/epitopeSummary.csv"),
+                        header = TRUE)
+    ),
+
     epitope_clustergram_rawdata = target(
       prepare_epitope_clustergram_data(
         clustergram1[[3]],
@@ -229,7 +237,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     ),
 
     clustergram2 = target(
-      generate_clustergram(epitope_clustergram_rawdata)
+      generate_clustergram(epitope_clustergram_rawdata, data_annotated_rbind, epitopeSummary)
     ),
 
 
