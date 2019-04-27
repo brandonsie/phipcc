@@ -1,4 +1,4 @@
-
+# phipcc <img src="https://brandonsie.github.io/docs/phipcc.png" align="right" width="140">
 
 ```
 install_github("brandonsie/epitopefindr")
