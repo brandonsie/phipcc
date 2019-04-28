@@ -1,0 +1,23 @@
+title: phipcc
+
+template:
+  params:
+    bootswatch: sandstone
+    ganalytics: UA-131446137-1
+reference:
+
+navbar:
+  title: ~
+  left:
+    - icon: fas fa-home fa-lg
+      href: index.html
+    - text: "Reference"
+      href: "reference/index.html"
+
+  right:
+    - icon: fa-github
+      href: https://github.com/brandonsie/phipcc/
+    - text: brandonsie
+      href: https://brandonsie.github.io/
+
+
