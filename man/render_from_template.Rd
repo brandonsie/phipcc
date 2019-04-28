@@ -4,31 +4,33 @@
 \alias{render_from_template}
 \title{Pass parameters to R markdown case control template and knit html output file.}
 \usage{
-render_from_template(output_file = paste0(format(Sys.Date(),
-  "\%Y\%m\%d"), "_CaseControl_Report.html"), output_dir = getwd(),
-  set_title, config, candidate_table_flagged, candidate_table_full, graphs,
-  cluster1, motifs, cluster2)
+render_from_template(output_file = NULL, output_dir = getwd(),
+  set_title = NULL, config = NULL, candidate_table_flagged = NULL,
+  candidate_table_full = NULL, graphs = NULL, clustergram1 = NULL,
+  motifs = NULL, clustergram2 = NULL)
 }
 \arguments{
-\item{output_file}{Name of generated html report.}
+\item{output_file}{Name of generated html report. If not provided, a default value is generated.}
 
 \item{output_dir}{Directory in which to write report.}
 
-\item{set_title}{Character string to be used for report title.}
+\item{set_title}{Character string to be used for report title.  If not provided, a default value is generated.}
 
-\item{config}{Configuration table used in phipcc:define_plan_case_control. After running drake::make on this plan, config can be retreived by calling drake::readd(config).}
+\item{config}{Configuration table used in phipcc:define_plan_case_control. After running drake::make on this plan, config can be retreived by calling drake::readd(config).  If not provided, a default value is generated.}
 
-\item{candidate_table_flagged}{Kable html object of flagged/annotated candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_flagged_html).}
+\item{candidate_table_flagged}{Kable html object of flagged/annotated candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_flagged_html).  If not provided, a default value is generated.}
 
-\item{candidate_table_full}{Kable html object of all candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_html).}
+\item{candidate_table_full}{Kable html object of all candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_html).  If not provided, a default value is generated.}
 
-\item{graphs}{List of ggplot objects to be plotted in report. Retreived by calling list(drake::readd(plot1), drake::readd(plot2), drake::readd(plot3)).}
+\item{graphs}{List of ggplot objects to be plotted in report. Retreived by calling list(drake::readd(plot1), drake::readd(plot2), drake::readd(plot3)).  If not provided, a default value is generated.}
 
-\item{cluster1}{List of gplots::heatmap.2 object and sorted data. Retreived by calling drake::readd(clustergram1).}
+\item{clustergram1}{List of gplots::heatmap.2 object and sorted data. Retreived by calling drake::readd(clustergram1).  If not provided, a default value is generated.}
 
-\item{motifs}{Directory path to epitopefindr motifs folder. Typically paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/").}
+\item{motifs}{Directory path to epitopefindr motifs folder. Typically paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/").  If not provided, a default value is generated.}
 
-\item{cluster2}{List of gplots::heatma.2 object after collapsing epitopefindr groups. Retreived by calling drake::readd(clustergram2)}
+\item{clustergram2}{List of gplots::heatma.2 object after collapsing epitopefindr groups. Retreived by calling drake::readd(clustergram2).  If not provided, a default value is generated.}
+
+\item{env}{Environment from which to load drake objects.}
 }
 \description{
 Pass parameters to R markdown case control template and knit html output file.

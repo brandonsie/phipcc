@@ -4,10 +4,15 @@
 \alias{generate_clustergram}
 \title{generates clustergram of hits}
 \usage{
-generate_clustergram(clustergram_rawdata, ncolors = 2)
+generate_clustergram(clustergram_rawdata, data_annotated_rbind,
+  epitopeSummary = NULL, ncolors = 2)
 }
 \arguments{
-\item{clustergram_rawdata}{output from prepare_clustergram_data or prepare_epitope_clustergram_data}
+\item{clustergram_rawdata}{Output from prepare_clustergram_data or prepare_epitope_clustergram_data}
+
+\item{data_annotated_rbind}{Annotated hit list from which to generate custom hovertext.}
+
+\item{epitopeSummary}{Optional epitopefindr group annotation output for custom hovertext.}
 
 \item{ncolors}{Number of colors to show in clustergram}
 }

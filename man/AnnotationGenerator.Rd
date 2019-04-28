@@ -6,7 +6,7 @@
 \usage{
 AnnotationGenerator(data, data_level, data_types, annot,
   peptide_col_id_match, protein_col_id_match, peptide_col_id_display,
-  protein_col_id_display, description_col_id, flag_col_id,
+  protein_col_id_display, description_col_id, flag_col_id, flag_type,
   pep_aa = "pep_aa")
 }
 \arguments{
@@ -27,6 +27,8 @@ AnnotationGenerator(data, data_level, data_types, annot,
 \item{description_col_id}{The name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to gene product or similar short protein descriptions to display in the markdown report.}
 
 \item{flag_col_id}{Character string or vector of column  name(s) corresponding to annotation flags to indicate in the markdown report (e.g. of known autoantigens or surface proteins).}
+
+\item{flag_type}{type "binary" to detect whether or not there is text in that cell. "literal" to display exact text from cell.}
 
 \item{pep_aa}{Character string of column name in annot corresponding to peptide amino acid sequence in the markdown report. Needed for peitopefindr.}
 

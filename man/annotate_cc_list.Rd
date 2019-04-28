@@ -4,14 +4,12 @@
 \alias{annotate_cc_list}
 \title{Call AnnotationGenerator on a list of data}
 \usage{
-annotate_cc_list(data, data_level, data_types, ...)
+annotate_cc_list(data, data_level, ...)
 }
 \arguments{
 \item{data}{Named list of data.}
 
 \item{data_level}{Character vector of equal length to data, indicating whether each data type is "peptide" or "protein" -level.}
-
-\item{data_types}{Character vector describing types of data stored in data list. e.g. "zscore", "polyclonal".}
 }
 \description{
 Call AnnotationGenerator on a list of data
