@@ -1,0 +1,31 @@
+param	value	description
+proj_id	MyStudy	field for markdown report title and body text
+library	Virscan	field for markdown report tile and body text
+ctrl_id	MyControls	field for markdown report body text
+delimiter	","	separate multi-value parameters with this
+case_names	"Project.serum.Project.Patient1.20A20G.1,Project.serum.Project.Patient2.20A20G.1, Project.serum.Project.Patient3.20A20G.1"	data column names corresponding to case samples
+ctrl_names	"Project.serum.Project.Control_1.20A20G.1,Project.serum.Project.Control_2.20A20G.1,Project.serum.Project.Control_3.20A20G.1,Project.serum.Project.Control_4.20A20G.1,Project.serum.Project.Control_5.20A20G.1,Project.serum.Project.Control_6.20A20G.1,Project.serum.Project.Control_7.20A20G.1,Project.serum.Project.Control_8.20A20G.1,Project.serum.Project.Control_9.20A20G.1,Project.serum.Project.Control_10.20A20G.1"	data column names corresponding to control samples
+input_dirs	"/data/caseData,/data/ctrlData"	directories that hold case and control data for this library
+data_types	"zscore,promax,polycl"	grep terms to search for in input_dirs
+data_level	"peptide,protein,protein"	"peptide or protein, corresponding to data_types. Affect annotation."
+min_hits_rcpgenerator	2	Minimum number of hits based on hit_thresh required to compute case_rcp for that peptide or protein.
+hit_thresh	"10,10,2"	Threshold for considering data hit. 
+rcp_thresh	0.95	RCP threshold for statistics and clustergram binarization.
+stat_test	Fisher	Statistical test to perform (currently only supports Fisher).
+pval_correction	BH	Pvalue correction method to be fed to p.adjust.
+min_hits_enrichment	2	Hit subsetting limit for minimum sample hits for inclusion of a peptide/protein.
+min_hits_rcp	3	Hit subsetting limit for minimum sample RCP hits for inclusion of a peptide/protein.
+min_freq_hits_rcp	0.2	Hit subsetting limit for minimum frequency of sample RCP hits for inclusion of a peptide/protein.
+pval_thresh	0.05	Hit subsetting limit for maximum pvalue 
+annot_path	/data/Annotation/VirscanAnnotation.tsv	path to library annotation file
+peptide_col_id_match	pep_id	"For data_level==""peptide"", the name of a column in annot that corresponds to the first column of data."
+protein_col_id_match	pro_id	"For data_level==""protein"", the name of a column in annot that corresponds to the first column of data."
+peptide_col_id_display	pep_rank	"For data_level==""peptide"", the name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to each peptide."
+protein_col_id_display	pro_id	The name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to each protein.
+description_col_id	product	The name of a column in annot that corresponds to identifiers to display in the markdown report corresponding to gene product or similar short protein descriptions to display in the markdown report.
+flag_col_id	"taxon_phip,taxon_family"	Character string or vector of column  name(s) corresponding to annotation flags to indicate in the markdown report (e.g. of known autoantigens or surface proteins).
+flag_type	literal	"""binary"" to detect whether or not there is text in that cell. ""literal"" to display exact text from cell."
+pep_aa	pep_aa	Character string of column name in annot corresponding to peptide amino acid sequence in the markdown report. Needed for peitopefindr.
+binarize_clustergram	TRUE	Logical controlling whether or not clustergram will be binarized above/below rcp_thresh.
+sample_field_delimiter	.	Field delimiter in sample names (column names of case_rcp.)
+sample_key_field	4	Which field(s) to retrain from sample names when separated by sample_field delimiter.
