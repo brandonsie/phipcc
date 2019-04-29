@@ -1,6 +1,6 @@
 # phipcc <img src="https://brandonsie.github.io/docs/phipcc.png" align="right" width="140">
 
-R package to build case-control reports from PhIP-Seq PhIP-Seq](https://www.nature.com/articles/s41596-018-0025-6) data. `phipcc` depends on multiple other packages including [`drake`](https://github.com/ropensci/drake), [`phipmake`](https://github.com/brandonsie/phipmake), [`epitopefindr`](https://github.com/brandonsie/epitopefindr). Familiarity with these packages will be useful in working with `phipcc`.
+R package to build case-control reports from [PhIP-Seq](https://www.nature.com/articles/s41596-018-0025-6) data. `phipcc` depends on multiple other packages including [`drake`](https://github.com/ropensci/drake), [`phipmake`](https://github.com/brandonsie/phipmake), [`epitopefindr`](https://github.com/brandonsie/epitopefindr). Familiarity with these packages will be useful in working with `phipcc`.
 
 # Setup  
 
