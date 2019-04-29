@@ -5,7 +5,7 @@ R package to build case-control reports from [PhIP-Seq](https://www.nature.com/a
 # Setup  
 
 1. In R console, execute:  
-```
+``` r
 if(!requireNamespace("remotes")) install.packages("remotes")
 remotes::install_github("ropensci/drake")
 remotes::install_github("brandonsie/phipmake")
@@ -20,7 +20,7 @@ remotes::install_github("brandonsie/phipcc")
 
 # Usage
 
-```
+``` r
 # Load and attach main libraries
 library(phipcc)
 library(drake)
