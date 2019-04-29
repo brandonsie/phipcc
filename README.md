@@ -13,12 +13,10 @@ remotes::install_github("brandonsie/epitopefindr")
 remotes::install_github("brandonsie/phipcc")
 
 ```
-## Additional epitopefindr-specific dependencies 
-```
-
+## Additional epitopefindr-specific setup steps 
 1. Install a TeX distribution with `pdflatex`. (e.g. [MiKTeX (version 2.9+)](https://miktex.org)). _(Optional; used to convert multiple sequence alignment TeX files to PDF.)_  
-2. Install [pdftk (version 2.02+)](https://www.pdflabs.com/tools/pdftk-server/). _(Optional; used to merge individual PDFs into a single file.)_  
-```
+2. Install [pdftk (version 2.02+)](https://www.pdflabs.com/tools/pdftk-server/). _(Optional; used to merge individual PDFs into a single file.)_
+
 
 # Usage
 
