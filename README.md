@@ -30,7 +30,7 @@ library(magrittr)
 drake::expose_imports("phipcc")
 plan <- phipcc::define_plan_case_control()
 
-# Make drake plan
+# Make targets specified in plan
 drake::make(plan)
 
 # Incorporate targets from drake into R Markdown report
