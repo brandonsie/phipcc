@@ -26,14 +26,19 @@ library(phipcc)
 library(drake)
 library(magrittr)
 
+# Setup phipcc configuration file
+# A template is provided with field descriptions. For now, you will need to edit fields manually.
+file.copy(system.file("example_config.tsv", package = "phipcc"), "config.tsv")
+
 # Prepare drake plan
 drake::expose_imports("phipcc")
-plan <- phipcc::define_plan_case_control()
+plan <- phipcc::define_plan_case_control(config_name = "config.tsv")
 
-# Make targets specified in plan
+# Build targets specified in plan
 drake::make(plan)
 
 # Incorporate targets from drake into R Markdown report
+# Should be called from the same working directory as drake::make(plan)
 phipcc::render_from_template()
 
 ```
