@@ -16,9 +16,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Generate Case-Control Reports from PhIP-seq Data">
+<script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Generate Case-Control Reports from PhIP-seq Data">
 <meta property="og:description" content="Process case/control data to perform exploratory data analysis, statistical comparison, hierarchical clustering of promising candidates, and BLAST-based epitope analysis.">
-<meta property="og:image" content="/logo.png">
+<meta property="og:image" content="https://brandonsie.github.io/phipcc/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -77,7 +79,13 @@
   </ul>
 </li>
       </ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -87,24 +95,60 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div id="phipcc-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#phipcc-" class="anchor"></a>phipcc <img src="https://brandonsie.github.io/docs/phipcc.png" align="right" width="140">
 </h1></div>
-<pre><code>install_github("brandonsie/epitopefindr")
-install_github("brandonsie/phipmake")
-install_github("ropensci/drake")
-install_github("brandonsie/phipcc")
-</code></pre>
-<pre><code>library(phipcc)
-library(drake)
-library(magrittr)
-drake::expose_imports("phipcc")
-plan &lt;- phipcc::define_plan_case_control()
-drake::make(plan)
-phipcc::render_from_template()
-</code></pre>
+<p>R package to build case-control reports from <a href="https://www.nature.com/articles/s41596-018-0025-6">PhIP-Seq</a> data. <code>phipcc</code> depends on multiple other packages including <a href="https://github.com/ropensci/drake"><code>drake</code></a>, <a href="https://github.com/brandonsie/phipmake"><code>phipmake</code></a>, <a href="https://github.com/brandonsie/epitopefindr"><code>epitopefindr</code></a>. Familiarity with these packages will be useful in working with <code>phipcc</code>.</p>
 </div>
+<div id="setup" class="section level1">
+<h1 class="hasAnchor">
+<a href="#setup" class="anchor"></a>Setup</h1>
+<ol>
+<li>In R console, execute:<br>
+</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ropensci/drake"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/phipmake"</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/epitopefindr"</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/phipcc"</span>)</a></code></pre></div>
+<div id="additional-epitopefindr-specific-setup-steps" class="section level2">
+<h2 class="hasAnchor">
+<a href="#additional-epitopefindr-specific-setup-steps" class="anchor"></a>Additional epitopefindr-specific setup steps</h2>
+<ol>
+<li>Install a TeX distribution with <code>pdflatex</code>. (e.g. <a href="https://miktex.org">MiKTeX (version 2.9+)</a>). <em>(Optional; used to convert multiple sequence alignment TeX files to PDF.)</em><br>
+</li>
+<li>Install <a href="https://www.pdflabs.com/tools/pdftk-server/">pdftk (version 2.02+)</a>. <em>(Optional; used to merge individual PDFs into a single file.)</em>
+</li>
+</ol>
+</div>
+</div>
+<div id="usage" class="section level1">
+<h1 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Load and attach main libraries</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(phipcc)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(drake)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co"># Setup phipcc configuration file</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co"># A template is provided with field descriptions. For now, you will need to edit fields manually.</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files">file.copy</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"example_config.tsv"</span>, <span class="dt">package =</span> <span class="st">"phipcc"</span>), <span class="st">"config.tsv"</span>)</a>
+<a class="sourceLine" id="cb2-9" title="9"></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co"># Prepare drake plan</span></a>
+<a class="sourceLine" id="cb2-11" title="11">drake<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/drake/topics/expose_imports">expose_imports</a></span>(<span class="st">"phipcc"</span>)</a>
+<a class="sourceLine" id="cb2-12" title="12">plan &lt;-<span class="st"> </span>phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/define_plan_case_control">define_plan_case_control</a></span>(<span class="dt">config_name =</span> <span class="st">"config.tsv"</span>)</a>
+<a class="sourceLine" id="cb2-13" title="13"></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co"># Build targets specified in plan</span></a>
+<a class="sourceLine" id="cb2-15" title="15">drake<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/drake/topics/make">make</a></span>(plan)</a>
+<a class="sourceLine" id="cb2-16" title="16"></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="co"># Incorporate targets from drake into R Markdown report</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co"># Should be called from the same working directory as drake::make(plan)</span></a>
+<a class="sourceLine" id="cb2-19" title="19">phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/render_from_template">render_from_template</a></span>()</a></code></pre></div>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -135,6 +179,20 @@ phipcc::render_from_template()
 </div>
 
   
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '0241fcb187f9abb631babb5fb0f92c0f',
+    indexName: 'phipcc',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>

@@ -1,9 +1,13 @@
 title: phipcc
+url: https://brandonsie.github.io/phipcc/
 
 template:
   params:
     bootswatch: sandstone
     ganalytics: UA-131446137-1
+    docsearch:
+      api_key: 0241fcb187f9abb631babb5fb0f92c0f
+      index_name: phipcc
 reference:
 
 navbar:
