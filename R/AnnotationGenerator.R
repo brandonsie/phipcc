@@ -34,8 +34,6 @@ AnnotationGenerator <- function(
     data$ProteinPeptide <- paste(data$Protein, data$Peptide, sep = "|")
 
     flags <- data.frame(annot[match(data[,1], annot[,peptide_col_id_match]), flag_col_id])
-    names(flags) <- flag_col_id
-
 
   } else if(data_level == "protein"){
     data$Protein <- annot[match(data[,1], annot[,protein_col_id_match]),
@@ -45,10 +43,10 @@ AnnotationGenerator <- function(
     data$ProteinPeptide <- paste(data$Protein, data_types, sep = "|")
 
     flags <- data.frame(annot[match(data[,1], annot[,protein_col_id_match]), flag_col_id])
-    names(flags) <- flag_col_id
-
 
   } else{stop("Invalid data_level passed to AnnotationGenerator.")}
+
+
 
   # Deal with duplicate names
 
@@ -73,6 +71,13 @@ AnnotationGenerator <- function(
                             description_col_id] %>% gsub("_", " ", .)
 
   # Prepare Flag annotations
+  if(ncol(flags) == 0){
+    flags <- data.frame(matrix("", ncol = 1, nrow = nrow(data)))
+    names(flags) <- ""
+  } else{
+    names(flags) <- flag_col_id
+  }
+
   if(flag_type == "binary"){
     flags_simplified <- flags
     flags_simplified[] <- sapply(1:ncol(flags), function(x){
@@ -81,12 +86,9 @@ AnnotationGenerator <- function(
       temp[temp != ""] <- names(flags)[x]
       return(temp)
     })
-  } else{
+  } else {
     flags_simplified <- flags
   }
-
-
-
 
   flags_concat <- flags_key <- vector(mode = "character", length = nrow(data))
 

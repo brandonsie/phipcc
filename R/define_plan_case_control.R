@@ -156,12 +156,16 @@ define_plan_case_control <- function(config_name = "config.tsv"){
       # if so then delete that element of data_filtered.
     ),
 
-    filtered_data_types = target(names(data_filtered)),
 
+    filtered_data_types = target(names(data_filtered)),
+    filtered_data_level = target({
+      type_level_map <- data.frame(type = !!data_types, level = !!data_level);
+      return(type_level_map$level[match(filtered_data_types, type_level_map$type)])
+    }),
     annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
 
     data_annotated = target(
-      annotate_cc_list(data_filtered, !!data_level, annot,
+      annotate_cc_list(data_filtered, filtered_data_level, annot,
         !!peptide_col_id_match, !!protein_col_id_match, !!peptide_col_id_display,
         !!protein_col_id_display, !!description_col_id, !!flag_col_id, !!flag_type
       )
