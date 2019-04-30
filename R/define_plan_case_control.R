@@ -190,15 +190,21 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     # Clustergram --------------------------------------------------------------
 
+    run_clustergram = target(ifelse(nrow(data_annotated_rbind) > 1, TRUE, FALSE)),
+
     clustergram_rawdata = target(
-      prepare_clustergram_data(
-        case_rcp, data_annotated_rbind, !!binarize_clustergram, !!rcp_thresh,
-        !!sample_field_delimiter, !!sample_key_field)
+      if(run_clustergram){
+        prepare_clustergram_data(
+          case_rcp, data_annotated_rbind, !!binarize_clustergram, !!rcp_thresh,
+          !!sample_field_delimiter, !!sample_key_field)
+      } else{NA}
     ),
 
     clustergram1 = target(
-      generate_clustergram(clustergram_rawdata, data_annotated_rbind) # (!) return list
-      #first element is plot, second is sorted spreadsheet
+      if(run_clustergram){
+        generate_clustergram(clustergram_rawdata, data_annotated_rbind) # (!) return list
+        #first element is plot, second is sorted spreadsheet
+      } else{NA}
     ),
 
     #(!) work on clustergram formatting. peptide/sample name sizes, etc.
@@ -207,41 +213,57 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     # eptiopefindr -------------------------------------------------------------
     #(!) include old output table?
 
-    write_hits_fasta = target(
-      epitopefindr::writeFastaAA(
-        data.frame(ID = data_annotated_rbind$ProteinPeptide,
-          #ID = paste(data_annotated_rbind$Protein,
-           #                   data_annotated_rbind$Peptide, sep = "|"),
-                   Seq = data_annotated_rbind$pep_aa) %>% na.omit,
-        file_out("data/hits.fasta")
-      )
+    fasta_table = target(
+      data.frame(ID = data_annotated_rbind$ProteinPeptide,
+                 #ID = paste(data_annotated_rbind$Protein,
+                 #                   data_annotated_rbind$Peptide, sep = "|"),
+                 Seq = data_annotated_rbind$pep_aa) %>% na.omit
     ),
 
-    run_epitopefindr = target({
-      epitopefindr::epfind(
-        data = file_in("data/hits.fasta"),
-        output.dir = "data/epitopefindr/",
-        make.png = TRUE)
-      file_out("data/epitopefindr/epitopeSummary.csv")
+    run_epitopefindr = target(ifelse(nrow(fasta_table) > 0, TRUE, FALSE)),
+
+    write_hits_fasta = target(
+      epitopefindr::writeFastaAA(fasta_table, file_out("data/hits.fasta"))
+    ),
+
+    epitopefindr = target({
+      if(run_epitopefindr){
+        epitopefindr::epfind(
+          data = file_in("data/hits.fasta"),
+          output.dir = "data/epitopefindr/",
+          make.png = TRUE)
+        file_out("data/epitopefindr/epitopeSummary.csv")
+
+      } else{NA}
+
     }),
 
     # Epitope Clustergram ------------------------------------------------------
 
 
     epitopeSummary = target(
-      data.table::fread(file_in("data/epitopefindr/epitopeSummary.csv"),
-                        header = TRUE)
+      if(run_epitopefindr){
+        data.table::fread(file_in("data/epitopefindr/epitopeSummary.csv"),
+                          header = TRUE)
+
+      } else{NA}
     ),
 
     epitope_clustergram_rawdata = target(
-      prepare_epitope_clustergram_data(
-        clustergram1[[3]],
-        file_in("data/epitopefindr/epitopeSummary.csv")
-      )
+      if(run_epitopefindr){
+        prepare_epitope_clustergram_data(
+          clustergram1[[3]],
+          file_in("data/epitopefindr/epitopeSummary.csv")
+        )
+      } else{NA}
+
     ),
 
+
     clustergram2 = target(
-      generate_clustergram(epitope_clustergram_rawdata, data_annotated_rbind, epitopeSummary)
+      if(run_epitopefindr){
+        generate_clustergram(epitope_clustergram_rawdata, data_annotated_rbind, epitopeSummary)
+      } else{NA}
     ),
 
 
