@@ -15,9 +15,9 @@ plot2_hitscore <- function(data, data_types){
               aes(x = Median.Hit.Score.Ctrl, y = Median.Hit.Score.Case,
                   Protein = Protein, Description = Description, Annotation = Flags)) +
     geom_point(data = data[data$Flags != "NA", ],
-               aes(color = Flags), alpha = 0.5) +
+               aes(color = Key.Flag), alpha = 0.5) +
     geom_point(data = data[data$Flags == "NA", ],
-               aes(color = Flags), alpha = 0.5) +
+               aes(color = Key.Flag), alpha = 0.5) +
     facet_wrap(~Data.Type, scales = "free") + theme_bw() +
     #scale_x_log10() + scale_y_log10() +
     ggtitle("Median Score of Hits, Cases vs. Controls") +

@@ -25,3 +25,6 @@ Imports:
   gplots,
   stats,
   epitopefindr
+Suggests:
+  future,
+  future.apply

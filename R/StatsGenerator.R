@@ -57,8 +57,6 @@ StatsGenerator <- function(
     } else{
       return(median(as.numeric(this_data_hits)))
     }
-
-
   }
 
   for(i in 1:nrow(case)){

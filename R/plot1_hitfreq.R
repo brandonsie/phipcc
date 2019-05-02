@@ -14,9 +14,9 @@ plot1_hitfreq <- function(data, data_types){
               aes(x = Median.Hit.Score.Case, y = RCP.Hit.Freq.Case,
                   Protein = Protein, Description = Description, Annotations = Flags)) +
     geom_jitter(data = data[data$Flags != "NA", ],
-                aes(color = Flags), alpha = 0.5) +
+                aes(color = Key.Flag), alpha = 0.5) +
     geom_jitter(data = data[data$Flags == "NA", ],
-                aes(color = Flags), alpha = 0.5) +
+                aes(color = Key.Flag), alpha = 0.5) +
     ggtitle("Hit Frequency vs. Median Score of Case Hits (Jittered)") +
     xlab("Median Case Hit Score") + ylab("Case Hit Frequency") +
     facet_wrap(~Data.Type, scales = "free_x") + theme_bw() +

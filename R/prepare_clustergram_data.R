@@ -6,7 +6,7 @@
 #' @param rcp_thresh Threshold value to binarize against if binarize_clustergram == TRUE.
 #' @param sample_field_delimiter Field delimiter in sample names (column names of case_rcp.)
 #' @param sample_key_field Which field(s) to retrain from sample names when separated by sample_field delimiter.
-#'
+#' @param AVARDA_RCP Optional AVARDA breadth case RCP data to add to clustergram.
 #'
 #'
 #' @export
@@ -14,11 +14,17 @@
 
 prepare_clustergram_data <- function(
   case_rcp, hit_list, binarize_clustergram = TRUE, rcp_thresh = 0.95,
-  sample_field_delimiter = ".", sample_key_field = 4){
+  sample_field_delimiter = ".", sample_key_field = 4, AVARDA_RCP = NULL){
 
   # Subset Case RCP data
   for(i in 1:length(case_rcp)){
     colnames(case_rcp[[i]])[1] <- "ID"
+  }
+
+  if(!is.na(AVARDA_RCP)[1]){
+    next_pos <- length(case_rcp) + 1
+    case_rcp[[next_pos]] <- AVARDA_RCP
+    names(case_rcp)[next_pos] <- "AVARDA_Breadth"
   }
 
   rcp_rbind <- dplyr::bind_rows(case_rcp, .id = "Data.Type")
@@ -27,6 +33,12 @@ prepare_clustergram_data <- function(
   rcp_subset <- rcp_rbind[rcp_rbind$ID %in% hit_list$id, ]
   rcp_subset <- rcp_subset[paste0(rcp_subset$Data.Type, rcp_subset$ID) %in%
                              paste0(hit_list$Data.Type, hit_list$id),]
+
+  if(!is.na(AVARDA_RCP)[1]){
+    rcp_subset %<>% rbind(rcp_rbind[rcp_rbind$ID %in% "AVARDA_Breadth", ])
+  }
+
+
 
   # first column Data.Type (zscore/polycl etc).
   # second column V1 pepID
@@ -43,7 +55,13 @@ prepare_clustergram_data <- function(
                              hit_list$id == rcp_subset$ID[i], ]
 
     #new way
-    this_rowname <- this_annot$ProteinPeptide
+    if(nrow(this_annot) == 0){
+      this_rowname <- rcp_subset$ID[i]
+
+    } else {
+      this_rowname <- this_annot$ProteinPeptide
+
+    }
 
     # if(this_annot$Peptide != "NA"){
     #   this_rowname <- paste(this_annot$Protein, this_annot$Peptide, sep = "|")

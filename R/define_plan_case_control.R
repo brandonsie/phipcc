@@ -59,6 +59,9 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   binarize_clustergram <- phipmake::getparam(config, "binarize_clustergram") %>% as.logical
   sample_field_delimiter <- phipmake::getparam(config, "sample_field_delimiter")
   sample_key_field <- phipmake::getparam(config, "sample_key_field") %>% as.numeric
+  use_AVARDA <- phipmake::getparam(config, "use_AVARDA") %>% as.logical
+  AVARDA_paths <- phipmake::getparam(config, "AVARDA_paths") %>% param_split(delimiter)
+  AVARDA_grep <- phipmake::getparam(config, "AVARDA_grep")
 
   # for epitopefindr
   epf_params <- phipmake::getparam(config, "epf_params")
@@ -192,13 +195,22 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     run_clustergram = target(ifelse(nrow(data_annotated_rbind) > 1, TRUE, FALSE)),
 
+    AVARDA_RCP = target(
+      if(!!use_AVARDA){
+        AVARDA_RCPGenerator(!!AVARDA_paths, !!AVARDA_grep, !!case_names, !!ctrl_names)
+      } else{return(NA)}
+    ),
+
     clustergram_rawdata = target(
       if(run_clustergram){
         prepare_clustergram_data(
           case_rcp, data_annotated_rbind, !!binarize_clustergram, !!rcp_thresh,
-          !!sample_field_delimiter, !!sample_key_field)
+          !!sample_field_delimiter, !!sample_key_field, AVARDA_RCP)
       } else{NA}
     ),
+
+
+
 
     clustergram1 = target(
       if(run_clustergram){
