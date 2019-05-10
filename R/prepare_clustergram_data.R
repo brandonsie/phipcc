@@ -14,18 +14,18 @@
 
 prepare_clustergram_data <- function(
   case_rcp, hit_list, binarize_clustergram = TRUE, rcp_thresh = 0.95,
-  sample_field_delimiter = ".", sample_key_field = 4, AVARDA_RCP = NULL){
+  sample_field_delimiter = ".", sample_key_field = 4, AVARDA_RCP = NA){
 
   # Subset Case RCP data
   for(i in 1:length(case_rcp)){
     colnames(case_rcp[[i]])[1] <- "ID"
   }
 
-  if(!is.na(AVARDA_RCP)[1]){
-    next_pos <- length(case_rcp) + 1
-    case_rcp[[next_pos]] <- AVARDA_RCP
-    names(case_rcp)[next_pos] <- "AVARDA_Breadth"
-  }
+  # if(!is.na(AVARDA_RCP)[1]){
+  #   next_pos <- length(case_rcp) + 1
+  #   case_rcp[[next_pos]] <- AVARDA_RCP
+  #   names(case_rcp)[next_pos] <- "AVARDA_Breadth"
+  # }
 
   rcp_rbind <- dplyr::bind_rows(case_rcp, .id = "Data.Type")
   # names(rcp_rbind)[2] <- "ID"
@@ -35,7 +35,8 @@ prepare_clustergram_data <- function(
                              paste0(hit_list$Data.Type, hit_list$id),]
 
   if(!is.na(AVARDA_RCP)[1]){
-    rcp_subset %<>% rbind(rcp_rbind[rcp_rbind$ID %in% "AVARDA_Breadth", ])
+    AVARDA_RCP$Data.Type <- ""
+    rcp_subset %<>% rbind(AVARDA_RCP)
   }
 
 
@@ -46,7 +47,9 @@ prepare_clustergram_data <- function(
 
   # Binarize above&below threshold if specified
   if(binarize_clustergram){
-    rcp_subset[,-c(1:2)] <- ifelse(rcp_subset[,-c(1:2)] > rcp_thresh, 1, 0)
+    rcp_subset[,!(colnames(rcp_subset) %in% c("Data.Type", "ID"))] <-
+      ifelse(rcp_subset[,!(colnames(rcp_subset) %in% c("Data.Type", "ID"))] >
+               rcp_thresh, 1, 0)
   }
 
   # Update rownames as Protein|Position
@@ -91,12 +94,12 @@ prepare_clustergram_data <- function(
   # update colnames as sample_key_field after splitting by sample_field_delimiter
   colnames(rcp_subset) <- lapply(colnames(rcp_subset),function(x){
     strsplit(x, sample_field_delimiter, fixed = TRUE) %>% unlist %>%
-      extract(sample_key_field)})
+      extract(sample_key_field)}) %>% unlist
 
 
   # Remove old label rows and compute heatmap
-  heatmap_data <- rcp_subset[, -c(1:2)] %>% as.matrix
-
+  heatmap_data <- rcp_subset[,!(colnames(rcp_subset) %in% c("Data.Type", "ID"))] %>% as.matrix
+  rownames(heatmap_data) <- rownames(rcp_subset)
 
 
   return(heatmap_data)

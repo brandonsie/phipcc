@@ -1,5 +1,6 @@
 #' Pass parameters to R markdown case control template and knit html output file.
 #'
+#' @param template Rmd output template file.
 #' @param output_file Name of generated html report. If not provided, a default value is generated.
 #' @param output_dir Directory in which to write report.
 #' @param set_title Character string to be used for report title.  If not provided, a default value is generated.
@@ -17,9 +18,11 @@
 #' @export
 
 render_from_template <- function(
-
+  template = system.file("template_case_control.Rmd", package="phipcc"),
   output_file = NULL, output_dir = getwd(), set_title = NULL, config = NULL,
-  candidate_table_flagged = NULL, candidate_table_full = NULL, graphs = NULL,
+  candidate_table_flagged = NULL, candidate_table_full = NULL,
+  AVARDA_candidate_table = NULL,
+  graphs = NULL,
   clustergram1 = NULL, motifs = NULL, clustergram2 = NULL
   ){
 
@@ -38,9 +41,10 @@ render_from_template <- function(
 
   if(is.null(candidate_table_flagged)) candidate_table_flagged <- drake::readd(candidate_table_flagged_html)
   if(is.null(candidate_table_full)) candidate_table_full <- drake::readd(candidate_table_html)
+  if(is.null(AVARDA_candidate_table)) AVARDA_candidate_table <- drake::readd(AVARDA_candidate_table_html)
 
   targets <- c("config", "candidate_table_flagged", "candidate_table_full",
-               "graphs", "clustergram1", "motifs", "clustergram2")
+               "graphs", "clustergram1", "motifs", "clustergram2", "AVARDA_candidate_table")
 
   for(i in 1:length(targets)){
     if(targets[i] %>% as.name %>% eval %>% is.null){drake::loadd(targets[i])}
@@ -67,7 +71,7 @@ render_from_template <- function(
   # Read in drake outputs
 
   # Knit RMarkdown
-  template <- system.file("template_case_control.Rmd", package="phipcc")
+  template <- template
   rmarkdown::render(
     template,
     output_file = output_file,
@@ -77,6 +81,7 @@ render_from_template <- function(
       config = config,
       candidate_table_flagged = candidate_table_flagged,
       candidate_table_full = candidate_table_full,
+      AVARDA_candidate_table = AVARDA_candidate_table,
       graphs = graphs,
       cluster1 = clustergram1,
       motifs = motifs,

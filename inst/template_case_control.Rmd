@@ -13,6 +13,7 @@ params:
   config: NULL
   candidate_table_flagged: NULL
   candidate_table_full: NULL
+  AVARDA_candidate_table: NULL
   graphs: NULL
   cluster1: NULL
   motifs: NULL
@@ -147,6 +148,39 @@ if(nrow(full_table) > 0){
 
 ```
 
+## AVARDA Hits
+```{r AVARDA Candidate Table}
+
+AVARDA_table <- params$AVARDA_candidate_table
+if(!is.na(AVARDA_table[[1]][1])){
+  use_scrollbox <- FALSE
+  if(nrow(AVARDA_table) > 17) use_scrollbox <- TRUE
+  
+  if(nrow(AVARDA_table) > 0){
+    AVARDA_table <- AVARDA_table %>%
+      knitr::kable(
+        format = "html", escape = FALSE,
+        caption = "AVARDA Candidate Virus Antigens", row.names = FALSE) %>%
+      kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>%
+      kableExtra::add_header_above(
+        c(" " = 1, "Seropos Frequency" = 2, "Median Seropos Score" = 2, 
+          " " = 1, "Breadth Hit Frequency" = 2, "Median Hit Breadth" = 2,
+          " " = 1)) %>%
+      kableExtra::column_spec(1, border_left = border) %>%
+      kableExtra::column_spec(ncol(AVARDA_table), border_right = border) %>% 
+      kableExtra::column_spec(c(1, 3, 5, 6, 8, 10), border_right = border)
+      
+    if(use_scrollbox){
+      AVARDA_table <- AVARDA_table %>% kableExtra::scroll_box(height = scroll_height)
+    }
+      
+    AVARDA_table
+  }
+  
+  
+}
+
+```
 
 
 # III. Exploratory Analysis {.tabset}    
@@ -189,7 +223,7 @@ plotly::ggplotly(graphs[[3]])
 I produce a clustergram of these hits using Ward's method for agglomeration. Each row corresponds to a peptide or protein from our filtered hit table and each column corresponds to a case sample. Squares shaded in black indicate an RCP hit, meaning that the sample scored above the 95th percentile of the control population for that peptide or protein. The dendrograms from this clustering are displayed on the following tabs.
 
 ```{r Clustergram 1, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster1)){
+if(!is.na(params$cluster1[[1]][1])){
   clustergram_sorted <- params$cluster1[[3]]
   htext <- params$cluster1[[2]]
   ncolors <- 2
@@ -220,7 +254,7 @@ if(!is.na(params$cluster1)){
 
 ## Row (Peptide) Dendrogram
 ```{r Row Dendrogram 1, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster1)){
+if(!is.na(params$cluster1[[1]][1])){
   row_dendrogram <- params$cluster1[[1]]$rowDendrogram
   library(plotly)
   
@@ -236,7 +270,7 @@ if(!is.na(params$cluster1)){
 
 ## Column (Sample) Dendrogram
 ```{r Col Dendrogram 1, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster1)){
+if(!is.na(params$cluster1[[1]][1])){
   col_dendrogram <- params$cluster1[[1]]$colDendrogram
   
   g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
@@ -295,7 +329,7 @@ if(file.exists(msa_name)){
 We re-cluster, collapsing peptides for which epitopefindr detected possible cross-reactivity into single rows.
 
 ```{r Clustergram 2, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster2)){
+if(!is.na(params$cluster2[[1]][1])){
   clustergram_sorted <- params$cluster2[[3]]
   htext <- params$cluster2[[2]]
   ncolors <- 5
@@ -325,7 +359,7 @@ if(!is.na(params$cluster2)){
 
 ### Row (Peptide/Epitope) Clustergram
 ```{r Row Dendrogram 2, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster2)){
+if(!is.na(params$cluster2[[1]][1])){
   row_dendrogram <- params$cluster2[[1]]$rowDendrogram
   
   g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
@@ -340,7 +374,7 @@ if(!is.na(params$cluster2)){
 
 ### Column (Sample) Clustergram
 ```{r Col Dendrogram 2, fig.width = 9, fig.height = 9}
-if(!is.na(params$cluster2)){
+if(!is.na(params$cluster2[[1]][1])){
   col_dendrogram <- params$cluster2[[1]]$colDendrogram
   
   g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 

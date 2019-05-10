@@ -9,7 +9,7 @@ prepare_candidate_table_html <- function(data){
   names(data)[5:8] <- c("Case", "Ctrl", "Case", "Ctrl")
   options(knitr.table.format = "html")
 
-
+  # frequency
   data[,4:5] <- data[,4:5] %>% dplyr::mutate_if(is.numeric, function(x){
     kableExtra::cell_spec(
       x, bold = TRUE,
@@ -17,7 +17,7 @@ prepare_candidate_table_html <- function(data){
       font_size = kableExtra::spec_font_size(x, begin = 12, end = 15))
   })
 
-
+  # median hit score
   data[,7:8] <- data[,7:8] %>% dplyr::mutate_if(is.numeric, function(x){
     kableExtra::cell_spec(
       x, bold=TRUE,

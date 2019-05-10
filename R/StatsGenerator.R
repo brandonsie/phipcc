@@ -50,7 +50,7 @@ StatsGenerator <- function(
 
   calcHitMedian <- function(input_data, input_rcp, rcp_thresh){
 
-    this_data_hits <- input_data[as.numeric(input_rcp) > rcp_thresh]
+    this_data_hits <- input_data[as.numeric(input_rcp) >= rcp_thresh]
 
     if(length(this_data_hits) == 0){
       return(0)
@@ -79,7 +79,7 @@ StatsGenerator <- function(
       fisher.test(cbind(c(data$Case.Hits[x],num.cases-data$Case.Hits[x]),
                         c(data$Ctrl.Hits[x],num.ctrls-data$Ctrl.Hits[x])))
     })))
-    data$Fisher.PValue <- p.adjust(as.numeric(ft$p.value),method= pval_correction)
+    data$Fisher.PValue <- p.adjust(as.numeric(ft$p.value),method = pval_correction)
 
     # Fisher Exact 2 (RCP)
     ft2 <- data.frame(t(sapply(1:nrow(case), function(x){

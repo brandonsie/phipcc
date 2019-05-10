@@ -92,7 +92,7 @@ RCPGenerator <- function(case, ctrl, min_hits = 0, hit_thresh = 0,
       #set upper bound to calculate i through j chunk incrementally
       inc <- 9999
       if(i+inc < nrow(case)){j <- i + inc} else{j <- nrow(case)}
-      rcp.calc[i:j,-1] <- apply(case[i:j,-1],1, dplyr::percent_rank)
+      rcp.calc[i:j,-1] <- t(apply(case[i:j,-1],1, (dplyr::percent_rank)))
       i <- j + 1
 
     }
