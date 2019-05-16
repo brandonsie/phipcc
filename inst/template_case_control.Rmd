@@ -164,11 +164,12 @@ if(!is.na(AVARDA_table[[1]][1])){
       kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>%
       kableExtra::add_header_above(
         c(" " = 1, "Seropos Frequency" = 2, "Median Seropos Score" = 2, 
-          " " = 1, "Breadth Hit Frequency" = 2, "Median Hit Breadth" = 2,
+          " " = 1, "Seropos Breadth" = 2,
+          #"Breadth Hit Frequency" = 2, "Median Hit Breadth" = 2,
           " " = 1)) %>%
       kableExtra::column_spec(1, border_left = border) %>%
       kableExtra::column_spec(ncol(AVARDA_table), border_right = border) %>% 
-      kableExtra::column_spec(c(1, 3, 5, 6, 8, 10), border_right = border)
+      kableExtra::column_spec(c(1, 3, 5, 6, 8, 9), border_right = border)
       
     if(use_scrollbox){
       AVARDA_table <- AVARDA_table %>% kableExtra::scroll_box(height = scroll_height)

@@ -183,9 +183,10 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     AVARDA_stats = target(
       if(!!use_AVARDA){
         StatsGenerator_AVARDA(AVARDA_case_data, AVARDA_ctrl_data,
-                              AVARDA_case_breadth_rcp, AVARDA_ctrl_breadth_rcp,
+                              # AVARDA_case_breadth_rcp, AVARDA_ctrl_breadth_rcp,
                               seropos_pval = !!pval_thresh,
-                              rcp_thresh = !!rcp_thresh)
+                              # rcp_thresh = !!rcp_thresh
+                              )
       } else NA
     ),
 
@@ -194,10 +195,11 @@ define_plan_case_control <- function(config_name = "config.tsv"){
         # Take seropos significant either up or down
         # take breadth significant only up in cases
         AVARDA_stats[(AVARDA_stats$Seropos.Fisher.PVal < !!pval_thresh) |
-                     ((AVARDA_stats$Breadth.Fisher.PVal < !!pval_thresh) &
-                      (AVARDA_stats$Breadth.RCP.Hits.Case.Freq >
-                         AVARDA_stats$Breadth.RCP.Hits.Ctrl.Freq)
-                      ),]
+                     ((AVARDA_stats$Seropos.Breadth.Wilcox.PVal < !!pval_thresh)# &
+                      #(AVARDA_stats$Breadth.RCP.Hits.Case.Freq >
+                      #   AVARDA_stats$Breadth.RCP.Hits.Ctrl.Freq
+                       #)
+                      ),] %>% na.omit
       } else NA
     ),
 
@@ -215,7 +217,10 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     AVARDA_clustergram_data = target(
       if(!!use_AVARDA){
-        prepare_AVARDA_clustergram_data(AVARDA_case_data, AVARDA_case_breadth_rcp, AVARDA_filtered, !!pval_thresh, !!rcp_thresh)
+        prepare_AVARDA_clustergram_data(
+          AVARDA_case_data, #AVARDA_case_breadth_rcp,
+          AVARDA_filtered, !!pval_thresh# , #!!rcp_thresh
+          )
       } else NA
     ),
 

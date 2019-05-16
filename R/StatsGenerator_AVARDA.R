@@ -7,8 +7,8 @@
 
 StatsGenerator_AVARDA <- function(
   AVARDA_case_data, AVARDA_ctrl_data,
-  AVARDA_case_breadth_rcp, AVARDA_ctrl_breadth_rcp,
-  seropos_pval = 0.05, rcp_thresh = 0.95,
+  # AVARDA_case_breadth_rcp, AVARDA_ctrl_breadth_rcp,
+  seropos_pval = 0.05, # rcp_thresh = 0.95,
   pval_correction = "BH"
 ){
 
@@ -45,29 +45,68 @@ StatsGenerator_AVARDA <- function(
 
   # Breadth
   {
-    # RCP
-    # AVARDA_case_breadth_rcp <- RCPGenerator(AVARDA_case_data$breadth, AVARDA_ctrl_data$breadth)
-    # AVARDA_ctrl_breadth_rcp <- RCPGenerator(AVARDA_ctrl_data$breadth, "self")
+    # New Way
 
-    AVARDA_case_breadth_rcp_hits <- AVARDA_case_breadth_rcp
-    AVARDA_case_breadth_rcp_hits[, -1] <- ifelse(AVARDA_case_breadth_rcp_hits[, -1] >= rcp_thresh, 1, 0)
+    # Take breadth values for seropositives. cases and controls. (!) there may be 0 hits
+    AVARDA_case_seropos_breadth <- AVARDA_case_data$breadth
+    AVARDA_case_seropos_breadth[, -1][AVARDA_case_seropos[, -1] == 0] <- NA
 
-    AVARDA_ctrl_breadth_rcp_hits <- AVARDA_ctrl_breadth_rcp
-    AVARDA_ctrl_breadth_rcp_hits[, -1] <- ifelse(AVARDA_ctrl_breadth_rcp_hits[, -1] >= rcp_thresh, 1, 0)
+    AVARDA_ctrl_seropos_breadth <- AVARDA_ctrl_data$breadth
+    AVARDA_ctrl_seropos_breadth[, -1][AVARDA_ctrl_seropos[, -1] == 0] <- NA
 
-    output_data$Breadth.RCP.Hits.Case <- apply(AVARDA_case_breadth_rcp_hits[,-1], 1, sum)
-    output_data$Breadth.RCP.Hits.Ctrl <- apply(AVARDA_ctrl_breadth_rcp_hits[,-1], 1, sum)
+    output_data$Median.Seropos.Breadth.Case <-
+      apply(AVARDA_case_seropos_breadth[,-1], 1, function(x){
+        x %>% na.omit %>% median
+      })
+    output_data$Median.Seropos.Breadth.Ctrl <-
+      apply(AVARDA_ctrl_seropos_breadth[,-1], 1, function(x){
+        x %>% na.omit %>% median
+      })
 
-    output_data$Breadth.RCP.Hits.Case.Freq <- output_data$Breadth.RCP.Hits.Case / num.cases
-    output_data$Breadth.RCP.Hits.Ctrl.Freq <- output_data$Breadth.RCP.Hits.Ctrl / num.ctrls
+    #wilcox two sided
+    wt <- data.frame(t(sapply(1:nrow(output_data), function(x){
+      this_case <- AVARDA_case_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
+      this_ctrl <- AVARDA_ctrl_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
 
-
-    # fishers exact
-    ft2 <- data.frame(t(sapply(1:nrow(output_data), function(x){
-      fisher.test(cbind(c(output_data$Breadth.RCP.Hits.Case[x], num.cases - output_data$Breadth.RCP.Hits.Case[x]),
-                        c(output_data$Breadth.RCP.Hits.Ctrl[x], num.ctrls - output_data$Breadth.RCP.Hits.Ctrl[x])))
+      if(length(this_case) > 0 & length(this_ctrl) > 0){
+        wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
+      } else NA
     })))
-    output_data$Breadth.Fisher.PVal <- p.adjust(as.numeric(ft2$p.value),method = pval_correction)
+
+    output_data$Seropos.Breadth.Wilcox.PVal <- p.adjust(as.numeric(wt), method = pval_correction)
+
+    # Report median hit breadth
+
+    # if hits in both, wilcox two tailed on seropos breadths
+
+    # report this pvalue for breadth. (!) adjust html table
+
+
+    # # Old Way
+    #
+    # # RCP
+    # # AVARDA_case_breadth_rcp <- RCPGenerator(AVARDA_case_data$breadth, AVARDA_ctrl_data$breadth)
+    # # AVARDA_ctrl_breadth_rcp <- RCPGenerator(AVARDA_ctrl_data$breadth, "self")
+    #
+    # AVARDA_case_breadth_rcp_hits <- AVARDA_case_breadth_rcp
+    # AVARDA_case_breadth_rcp_hits[, -1] <- ifelse(AVARDA_case_breadth_rcp_hits[, -1] >= rcp_thresh, 1, 0)
+    #
+    # AVARDA_ctrl_breadth_rcp_hits <- AVARDA_ctrl_breadth_rcp
+    # AVARDA_ctrl_breadth_rcp_hits[, -1] <- ifelse(AVARDA_ctrl_breadth_rcp_hits[, -1] >= rcp_thresh, 1, 0)
+    #
+    # output_data$Breadth.RCP.Hits.Case <- apply(AVARDA_case_breadth_rcp_hits[,-1], 1, sum)
+    # output_data$Breadth.RCP.Hits.Ctrl <- apply(AVARDA_ctrl_breadth_rcp_hits[,-1], 1, sum)
+    #
+    # output_data$Breadth.RCP.Hits.Case.Freq <- output_data$Breadth.RCP.Hits.Case / num.cases
+    # output_data$Breadth.RCP.Hits.Ctrl.Freq <- output_data$Breadth.RCP.Hits.Ctrl / num.ctrls
+    #
+    #
+    # # fishers exact
+    # ft2 <- data.frame(t(sapply(1:nrow(output_data), function(x){
+    #   fisher.test(cbind(c(output_data$Breadth.RCP.Hits.Case[x], num.cases - output_data$Breadth.RCP.Hits.Case[x]),
+    #                     c(output_data$Breadth.RCP.Hits.Ctrl[x], num.ctrls - output_data$Breadth.RCP.Hits.Ctrl[x])))
+    # })))
+    # output_data$Breadth.Fisher.PVal <- p.adjust(as.numeric(ft2$p.value),method = pval_correction)
 
   }
 
@@ -93,19 +132,19 @@ StatsGenerator_AVARDA <- function(
         AVARDA_ctrl_data$seropos[i,-1], AVARDA_ctrl_seropos[i, -1], 1, na.value = 1
       )
 
-      output_data$Median.Breadth.Hit.Case[i] <- calcHitMedian(
-        AVARDA_case_data$breadth[i,-1], AVARDA_case_breadth_rcp_hits[i, -1], 1
-      )
-
-      output_data$Median.Breadth.Hit.Ctrl[i] <- calcHitMedian(
-        AVARDA_ctrl_data$breadth[i,-1], AVARDA_ctrl_breadth_rcp_hits[i, -1], 1
-      )
+      # output_data$Median.Breadth.Hit.Case[i] <- calcHitMedian(
+      #   AVARDA_case_data$breadth[i,-1], AVARDA_case_breadth_rcp_hits[i, -1], 1
+      # )
+      #
+      # output_data$Median.Breadth.Hit.Ctrl[i] <- calcHitMedian(
+      #   AVARDA_ctrl_data$breadth[i,-1], AVARDA_ctrl_breadth_rcp_hits[i, -1], 1
+      # )
     }
   }
 
 
   output_data$PVal.Min <-
-    apply(output_data[,c("Seropos.Fisher.PVal","Breadth.Fisher.PVal")],1,min)
+    apply(output_data[,c("Seropos.Fisher.PVal","Seropos.Breadth.Wilcox.PVal")],1,min)
 
 
   return(output_data)
