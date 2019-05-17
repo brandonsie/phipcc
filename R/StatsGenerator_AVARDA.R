@@ -69,7 +69,7 @@ StatsGenerator_AVARDA <- function(
       this_ctrl <- AVARDA_ctrl_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
 
       if(length(this_case) > 0 & length(this_ctrl) > 0){
-        wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
+        stats::wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
       } else NA
     })))
 
