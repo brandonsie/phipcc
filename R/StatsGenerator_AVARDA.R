@@ -65,12 +65,38 @@ StatsGenerator_AVARDA <- function(
 
     #wilcox two sided
     wt <- data.frame(t(sapply(1:nrow(output_data), function(x){
-      this_case <- AVARDA_case_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
-      this_ctrl <- AVARDA_ctrl_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
+      this_case_base <- AVARDA_case_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
+      this_ctrl_base <- AVARDA_ctrl_seropos_breadth[x, -1] %>% as.numeric %>% na.omit
 
-      if(length(this_case) > 0 & length(this_ctrl) > 0){
-        stats::wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
+
+      if(length(this_case_base) >= 3 & length(this_ctrl_base) >= 3){
+
+        # # Old way procuded ties
+        # stats::wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
+
+        # Add random value to each control. Repeat 100 times and take average.
+        reps <- 100
+        pvls <- vector("numeric", reps)
+        pvls <- sapply(1:reps, function(x){
+          # generate random decimals. rnorm divided by (largest absolute value * 2)
+          rand_nums <- rnorm(length(this_case_base) + length(this_ctrl_base))
+          max_rand <- rand_nums %>% abs %>% max
+          rand_dec <- rand_nums / (max_rand * 2)
+
+          this_case <- this_case_base + rand_dec[1:length(this_case_base)]
+          this_ctrl <- this_ctrl_base + rand_dec[((length(this_case_base)+1):length(rand_dec))]
+          stats::wilcox.test(this_case, this_ctrl, alternative = "two.sided")$p.value
+        })
+
+        return(mean(pvls))
+
+
+
       } else NA
+
+
+
+
     })))
 
     output_data$Seropos.Breadth.Wilcox.PVal <- p.adjust(as.numeric(wt), method = pval_correction)

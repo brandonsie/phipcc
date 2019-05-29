@@ -52,15 +52,16 @@ render_from_template <- function(
 
   proj_id <- phipmake::getparam(config, "proj_id")
   library <- phipmake::getparam(config, "library")
+  ctrl_id <- phipmake::getparam(config, "ctrl_id")
 
 
   if(is.null(output_file)) output_file <-
     paste0(
-      format(Sys.Date(),"%Y%m%d"), "_", proj_id, "_", library,
+      format(Sys.Date(),"%Y%m%d"), "_", proj_id, "_", ctrl_id, "_", library,
       "_CaseControl_Report.html")
 
   if(is.null(set_title)) set_title <-
-    paste0(proj_id, " PhIP-Seq Case-Control Report: ", library, " Library")
+    paste0(proj_id, " vs. ", ctrl_id, " PhIP-Seq Case-Control Report: ", library, " Library")
 
 
 

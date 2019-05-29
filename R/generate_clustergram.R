@@ -12,6 +12,7 @@ generate_clustergram <- function(clustergram_rawdata, data_annotated_rbind, epit
   my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
 
   if(!is.null(dev.list())) dev.off()
+  png("heatmap.png")
   a <- gplots::heatmap.2(
     clustergram_rawdata,
     key = FALSE, keysize = 0.5, key.title = "RCP>=0.95",
@@ -35,6 +36,7 @@ generate_clustergram <- function(clustergram_rawdata, data_annotated_rbind, epit
     hclustfun = function(x) hclust(x, method = "ward.D2"),
     distfun = function(x) dist(x, method = "euclidean")^2
   )
+  file.remove("heatmap.png")
   if(!is.null(dev.list())) dev.off()
 
   #store sorted heatmap
