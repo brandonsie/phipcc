@@ -109,7 +109,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Guide to phipcc for Larman Lab</h1>
+                        <h4 class="author">Brandon Sie</h4>
             
+            <h4 class="date">2019-05-30</h4>
       
       
       <div class="hidden name"><code>larmanguide.Rmd</code></div>
@@ -121,9 +123,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p><a href="https://github.com/brandonsie/phipcc"><code>phipcc</code></a> in an R package designed to generate R Markdown reports for case-control studies of <a href="https://www.nature.com/articles/s41596-018-0025-6">PhIP-seq</a> data.</p>
-<p><code>phipcc</code> builds analysis targets using the <a href="https://github.com/ropensci/drake"><code>drake</code></a> package from rOpenSci and Will Landau.</p>
-<p>Also depends on <code>phipmake</code>, <code>epitopefindr</code>, and <code>AVARDA</code>.</p>
+<p><a href="https://github.com/brandonsie/phipcc"><code>phipcc</code></a> in an R package designed to generate R Markdown reports for case-control studies of <a href="https://www.nature.com/articles/s41596-018-0025-6">PhIP-seq</a> data. <code>phipcc</code> builds analysis targets using the <a href="https://github.com/ropensci/drake"><code>drake</code></a> package from rOpenSci and Will Landau. <code>phipcc</code> also depends on <code>phipmake</code>, <code>epitopefindr</code>, and <code>AVARDA</code>.</p>
 <p>This guide is written specifically for the Larman Lab and MARCC. Eventually I will write a more general guide.</p>
 </div>
 <div id="overview" class="section level1">
@@ -145,6 +145,7 @@
 <div id="marcc" class="section level2">
 <h2 class="hasAnchor">
 <a href="#marcc" class="anchor"></a>MARCC</h2>
+<p>Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="bu">cd</span> /data/hlarman1/PhIPdb/Software/install_r_pkg</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="ex">sbatch</span> --export=pkg=<span class="st">"brandonsie/drake"</span> installGithub.sh</a>
@@ -163,7 +164,7 @@
 <div id="local" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local" class="anchor"></a>Local</h2>
-<p>Install <a href="https://www.r-project.org/">R (e.5+)</a> and <a href="https://www.rstudio.com/">RStudio</a>. In R console, execute:</p>
+<p>Install <a href="https://www.r-project.org/">R (3.5+)</a> and <a href="https://www.rstudio.com/">RStudio</a>. In R console, execute:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co"># Required (for steps that are not yet supported on MARCC)</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
@@ -182,7 +183,7 @@
 <div id="note" class="section level2">
 <h2 class="hasAnchor">
 <a href="#note" class="anchor"></a>Note</h2>
-<p><code>epitopefindr</code> also depends on <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download">BLAST+</a> and <code>pdflatex</code> e.g. from <a href="https://www.tug.org/texlive/">TeX Live</a>. I have already installed these for the Larman Lab group on MARCC. From the Larman Lab group MARCC, installations can be sourced by entering:</p>
+<p><code>epitopefindr</code> also depends on <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&amp;DOC_TYPE=Download">BLAST+</a> and <code>pdflatex</code> e.g. from <a href="https://www.tug.org/texlive/">TeX Live</a>. I have already installed these for the Larman Lab group on MARCC. From the Larman Lab group MARCC, installations can be sourced by entering: (these steps are already built in to the MARCC <code>phipcc</code> shell script.)</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="bu">export</span> <span class="va">PATH=</span>/data/hlarman1/PhIPdb/Software/texlive/2018/bin/x86_64-linux:<span class="st">"</span><span class="va">$PATH</span><span class="st">"</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="bu">export</span> <span class="va">PATH=</span>/data/hlarman1/PhIPdb/Software/BLAST+/ncbi-blast-2.8.1+/bin:<span class="st">"</span><span class="va">$PATH</span><span class="st">"</span></a></code></pre></div>
 </div>

@@ -1,5 +1,7 @@
 ---
 title: "Guide to phipcc for Larman Lab"
+author: "Brandon Sie"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{larmanguide}
@@ -17,11 +19,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-[`phipcc`](https://github.com/brandonsie/phipcc) in an R package designed to generate R Markdown reports for case-control studies of [PhIP-seq](https://www.nature.com/articles/s41596-018-0025-6) data.
-
-`phipcc` builds analysis targets using the [`drake`](https://github.com/ropensci/drake) package from rOpenSci and Will Landau.
-
-Also depends on `phipmake`, `epitopefindr`, and `AVARDA`.
+[`phipcc`](https://github.com/brandonsie/phipcc) in an R package designed to generate R Markdown reports for case-control studies of [PhIP-seq](https://www.nature.com/articles/s41596-018-0025-6) data. `phipcc` builds analysis targets using the [`drake`](https://github.com/ropensci/drake) package from rOpenSci and Will Landau. `phipcc` also depends on `phipmake`, `epitopefindr`, and `AVARDA`.
 
 This guide is written specifically for the Larman Lab and MARCC. Eventually I will write a more general guide.
 
@@ -37,6 +35,8 @@ Currently, `define_plan_case_control()` and the subsetquent call to `drake::make
 # Software Setup
 
 ## MARCC
+
+Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.
 
 ```{bash, eval = FALSE}
 
@@ -58,7 +58,7 @@ sbatch --export=pkg="S4Vectors" installBioc.sh
 
 ## Local
 
-Install [R (e.5+)](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). 
+Install [R (3.5+)](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). 
 In R console, execute:
 
 ```{r, eval = FALSE}
@@ -81,7 +81,7 @@ BiocManager::install(c("Biostrings", "IRanges", "msa", "S4Vectors"))
 
 ## Note
 
-`epitopefindr` also depends on [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) and `pdflatex` e.g. from [TeX Live](https://www.tug.org/texlive/). I have already installed these for the Larman Lab group on MARCC. From the Larman Lab group MARCC, installations can be sourced by entering:
+`epitopefindr` also depends on [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) and `pdflatex` e.g. from [TeX Live](https://www.tug.org/texlive/). I have already installed these for the Larman Lab group on MARCC. From the Larman Lab group MARCC, installations can be sourced by entering: (these steps are already built in to the MARCC `phipcc` shell script.)
 
 ```{bash, eval = FALSE}
 export PATH=/data/hlarman1/PhIPdb/Software/texlive/2018/bin/x86_64-linux:"$PATH"
