@@ -26,5 +26,7 @@ Imports:
   stats,
   epitopefindr
 Suggests:
-  future,
-  future.apply
+    future,
+    future.apply,
+    rmarkdown
+VignetteBuilder: knitr

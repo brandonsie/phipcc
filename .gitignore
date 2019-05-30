@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+phipcc.Rcheck/
+phipcc*.tar.gz
+phipcc*.tgz
+inst/doc

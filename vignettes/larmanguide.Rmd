@@ -1,0 +1,32 @@
+---
+title: "Guide to phipcc for Larman Lab"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{larmanguide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+# Setup
+```{bash, eval=FALSE}
+
+sbatch --export=pkg="brandonsie/phipcc" installGithub.sh
+sbatch --export=pkg="brandonsie/epitopefindr" installGithub.sh
+
+```
+
+also need blast+. alredy installed in this case.
+
+install on MARCC and local computer.
+run on MARCC and/or local computer
+RENDER locally with Rstudio installed. for knitr. dowlnoad .RData or .drake file, render_from_template

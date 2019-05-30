@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^phipcc\.Rcheck$
+^phipcc.*\.tar\.gz$
+^phipcc.*\.tgz$
