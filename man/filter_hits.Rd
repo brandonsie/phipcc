@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_hits.R
 \name{filter_hits}
 \alias{filter_hits}
-\title{placeholder}
+\title{filter hits data to prepare for RCPGenerator}
 \usage{
 filter_hits(data, min_hits_enrichment, min_hits_rcp, pval_thresh,
   case_over_control = TRUE)
@@ -20,5 +20,5 @@ filter_hits(data, min_hits_enrichment, min_hits_rcp, pval_thresh,
 for which hit frequency in cases is higher than hit frequency in controls.}
 }
 \description{
-placeholder
+filter hits data to prepare for RCPGenerator
 }

@@ -1,4 +1,4 @@
-#' placeholder
+#' filter hits data to prepare for RCPGenerator
 #'
 #' @param data Input data frame.
 #' @param min_hits_enrichment Threshold value for data_stats$Case.Hits.
