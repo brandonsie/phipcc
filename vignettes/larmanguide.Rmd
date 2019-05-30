@@ -17,16 +17,104 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-# Setup
-```{bash, eval=FALSE}
+[`phipcc`](https://github.com/brandonsie/phipcc) in an R package designed to generate R Markdown reports for case-control studies of [PhIP-seq](https://www.nature.com/articles/s41596-018-0025-6) data.
 
+`phipcc` builds analysis targets using the [`drake`](https://github.com/ropensci/drake) package from rOpenSci and Will Landau.
+
+Also depends on `phipmake`, `epitopefindr`, and `AVARDA`.
+
+This guide is written specifically for the Larman Lab and MARCC. Eventually I will write a more general guide.
+
+# Overview
+
+There are two major phipcc functions that the user will interact with.  
+
+* `phipcc::define_plan_case_control()` defines the computational case control plan to be executed by `drake::make()`. This function `define_plan_case_control` reads configuration settings from `config.tsv`, which will be discussed in depth in a later section of this guide.  
+* `phipcc::render_from_template()` reads in outputs from the case control plan and uses an R Markdown template to generate an HTML report. (the default template is provided in the package `system.file("template_case_control.Rmd", package = "phipcc")`, but custom templates can also be used.)  
+
+Currently, `define_plan_case_control()` and the subsetquent call to `drake::make()` can be run on MARCC. However, the final step of knitting the final report depends on `pandoc`, a dependency that I haven't yet figured out how to get working on MARCC. However, you can copy the necessary files to your local computer and run `render_from_template` locally.
+
+# Software Setup
+
+## MARCC
+
+```{bash, eval = FALSE}
+
+cd /data/hlarman1/PhIPdb/Software/install_r_pkg
+sbatch --export=pkg="brandonsie/drake" installGithub.sh
+sbatch --export=pkg="brandonsie/phipmake" installGithub.sh
 sbatch --export=pkg="brandonsie/phipcc" installGithub.sh
+
+# Epitopefindr-specific setup
 sbatch --export=pkg="brandonsie/epitopefindr" installGithub.sh
+sbatch --export=pkg="mhahsler/rBLAST" installGithub.sh
+sbatch --export=pkg="brandonsie/pdfuniter" installGithub.sh
+sbatch --export=pkg="pdftools" installCRAN.sh
+sbatch --export=pkg="Biostrings" installBioc.sh
+sbatch --export=pkg="IRanges" installBioc.sh
+sbatch --export=pkg="msa" installBioc.sh
+sbatch --export=pkg="S4Vectors" installBioc.sh
 
 ```
 
-also need blast+. alredy installed in this case.
+## Local
 
-install on MARCC and local computer.
+Install [R (e.5+)](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). 
+In R console, execute:
+
+```{r, eval = FALSE}
+
+if(!requireNamespace("remotes")) install.packages("remotes")
+remotes::install_github("ropensci/drake")
+remotes::install_github("brandonsie/phipmake")
+remotes::install_github("brandonsie/epitopefindr")
+remotes::install_github("brandonsie/phipcc")
+
+remotes::install_github("mhahsler/rBLAST")
+remotes::install_github("brandonsie/pdfuniter")
+install.packages("pdftools")
+
+if (!requireNamespace("BiocManager")) install.packages("BiocManager")
+BiocManager::install(c("Biostrings", "IRanges", "msa", "S4Vectors"))
+
+```
+
+## Note
+
+`epitopefindr` also depends on [BLAST+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) and `pdflatex` e.g. from [TeX Live](https://www.tug.org/texlive/). I have already installed these for the Larman Lab group on MARCC. From the Larman Lab group MARCC, installations can be sourced by entering:
+
+```{bash, eval = FALSE}
+export PATH=/data/hlarman1/PhIPdb/Software/texlive/2018/bin/x86_64-linux:"$PATH"
+export PATH=/data/hlarman1/PhIPdb/Software/BLAST+/ncbi-blast-2.8.1+/bin:"$PATH"
+
+```
+
+
+
+# Preparing a Case-Control Study
+
+## Prerequisites
+
+phipmake drake pipeline
+AVARDA on targets
+
+## Configuration File
+
+A template is provided with field descriptions. For now, you will need to edit fields manually.
+file.copy(system.file("example_config.tsv", package = "phipcc"), "config.tsv")
+
+## MARCC (or Local) drake pipeline
+
+
+
+
 run on MARCC and/or local computer
+## Local report knitting
+
+show hidden folders
+copy .drake to new project folder
+also need to copy /data/ folder with epitopefindr
+
+setwd
+
 RENDER locally with Rstudio installed. for knitr. dowlnoad .RData or .drake file, render_from_template

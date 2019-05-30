@@ -306,6 +306,13 @@ if(file.exists(msa_name)){
   for(i in 1:num_page){
     num_padded <- formatC(i, width = num_length, flag = "0")
     png_name <- paste0(msa_path, "msa-", num_padded, ".png")
+    pdf_name <- paste0(msa_path, "msa-", num_padded, ".pdf")
+    
+    if(!file.exists(png_name)){
+          pdftools::pdf_convert(pdf_name, format = "png", filenames = png_name,
+                          dpi = 300,verbose = FALSE)
+
+    }
   
     		cat("  \n### MSA",  i, "  \n")
   		for(j in 1:length(png_name)){

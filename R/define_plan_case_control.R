@@ -327,7 +327,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
         epitopefindr::epfind(
           data = file_in("data/hits.fasta"),
           output.dir = "data/epitopefindr/",
-          make.png = TRUE)
+          make.png = FALSE)
         file_out("data/epitopefindr/epitopeSummary.csv")
 
       } else{NA}
