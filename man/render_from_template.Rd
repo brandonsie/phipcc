@@ -4,12 +4,16 @@
 \alias{render_from_template}
 \title{Pass parameters to R markdown case control template and knit html output file.}
 \usage{
-render_from_template(output_file = NULL, output_dir = getwd(),
+render_from_template(template = system.file("template_case_control.Rmd",
+  package = "phipcc"), output_file = NULL, output_dir = getwd(),
   set_title = NULL, config = NULL, candidate_table_flagged = NULL,
-  candidate_table_full = NULL, graphs = NULL, clustergram1 = NULL,
-  motifs = NULL, clustergram2 = NULL)
+  candidate_table_full = NULL, AVARDA_candidate_table = NULL,
+  graphs = NULL, clustergram1 = NULL, motifs = NULL,
+  clustergram2 = NULL)
 }
 \arguments{
+\item{template}{Rmd output template file.}
+
 \item{output_file}{Name of generated html report. If not provided, a default value is generated.}
 
 \item{output_dir}{Directory in which to write report.}

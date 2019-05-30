@@ -29,3 +29,7 @@ pep_aa	pep_aa	Character string of column name in annot corresponding to peptide 
 binarize_clustergram	TRUE	Logical controlling whether or not clustergram will be binarized above/below rcp_thresh.
 sample_field_delimiter	.	Field delimiter in sample names (column names of case_rcp.)
 sample_key_field	4	Which field(s) to retrain from sample names when separated by sample_field delimiter.
+use_AVARDA	TRUE	"Logical, whether or not to generate AVARDA targets."
+AVARDA_paths	"/data/caseData/VirscanLar_000/AVARDA/,/data/ctrlData/VirscanLar_000/AVARDA/"	Path to case and control AVARDA output files
+AVARDA_seropos_grep	full_BH_p_value	Filename substring for AVARDA seropositivitity matrix.
+AVARDA_breadth_grep	full_filtered_evidence_number	Filename substring for AVARDA breadth matrix.

@@ -104,6 +104,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/larmanguide.html">Setup Guide for Larman Lab</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -151,14 +163,20 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>render_from_template</span>(<span class='kw'>output_file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></span>(),
+    <pre class="usage"><span class='fu'>render_from_template</span>(<span class='kw'>template</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"template_case_control.Rmd"</span>,
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"phipcc"</span>), <span class='kw'>output_file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a></span>(),
   <span class='kw'>set_title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>config</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>candidate_table_flagged</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>candidate_table_full</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>graphs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clustergram1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>motifs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clustergram2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>candidate_table_full</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>AVARDA_candidate_table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>graphs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>clustergram1</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>motifs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>clustergram2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>template</th>
+      <td><p>Rmd output template file.</p></td>
+    </tr>
     <tr>
       <th>output_file</th>
       <td><p>Name of generated html report. If not provided, a default value is generated.</p></td>

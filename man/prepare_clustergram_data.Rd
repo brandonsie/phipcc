@@ -6,7 +6,7 @@
 \usage{
 prepare_clustergram_data(case_rcp, hit_list, binarize_clustergram = TRUE,
   rcp_thresh = 0.95, sample_field_delimiter = ".",
-  sample_key_field = 4)
+  sample_key_field = 4, AVARDA_RCP = NA)
 }
 \arguments{
 \item{case_rcp}{RCP data from RCPGenerator or compute_rcp_list.}
@@ -20,6 +20,8 @@ prepare_clustergram_data(case_rcp, hit_list, binarize_clustergram = TRUE,
 \item{sample_field_delimiter}{Field delimiter in sample names (column names of case_rcp.)}
 
 \item{sample_key_field}{Which field(s) to retrain from sample names when separated by sample_field delimiter.}
+
+\item{AVARDA_RCP}{Optional AVARDA breadth case RCP data to add to clustergram.}
 }
 \description{
 Process hit data for hierarchical clustering.

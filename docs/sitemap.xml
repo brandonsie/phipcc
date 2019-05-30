@@ -10,6 +10,9 @@
     <loc>https://brandonsie.github.io/phipcc//reference/AnnotationGenerator.html</loc>
   </url>
   <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/AVARDA_RCPGenerator.html</loc>
+  </url>
+  <url>
     <loc>https://brandonsie.github.io/phipcc//reference/compute_rcp_list.html</loc>
   </url>
   <url>
@@ -49,6 +52,15 @@
     <loc>https://brandonsie.github.io/phipcc//reference/plot3_pval.html</loc>
   </url>
   <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/prepare_AVARDA_candidate_table.html</loc>
+  </url>
+  <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/prepare_AVARDA_candidate_table_html.html</loc>
+  </url>
+  <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/prepare_AVARDA_clustergram_data.html</loc>
+  </url>
+  <url>
     <loc>https://brandonsie.github.io/phipcc//reference/prepare_candidate_table.html</loc>
   </url>
   <url>
@@ -64,12 +76,21 @@
     <loc>https://brandonsie.github.io/phipcc//reference/RCPGenerator.html</loc>
   </url>
   <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/read_AVARDA.html</loc>
+  </url>
+  <url>
     <loc>https://brandonsie.github.io/phipcc//reference/render_from_template.html</loc>
   </url>
   <url>
     <loc>https://brandonsie.github.io/phipcc//reference/StatsGenerator.html</loc>
   </url>
   <url>
+    <loc>https://brandonsie.github.io/phipcc//reference/StatsGenerator_AVARDA.html</loc>
+  </url>
+  <url>
     <loc>https://brandonsie.github.io/phipcc//reference/subset_data.html</loc>
+  </url>
+  <url>
+    <loc>https://brandonsie.github.io/phipcc//articles/larmanguide.html</loc>
   </url>
 </urlset>
