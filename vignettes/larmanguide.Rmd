@@ -36,7 +36,7 @@ Currently, `define_plan_case_control()` and the subsetquent call to `drake::make
 
 ## MARCC
 
-Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.
+1. Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.  
 
 ```{bash, eval = FALSE}
 
@@ -58,8 +58,8 @@ sbatch --export=pkg="S4Vectors" installBioc.sh
 
 ## Local
 
-Install [R (3.5+)](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/). 
-In R console, execute:
+1. Install [R (3.5+)](https://www.r-project.org/) and [RStudio](https://www.rstudio.com/).   
+2. In R console, execute:  
 
 ```{r, eval = FALSE}
 
@@ -101,6 +101,12 @@ export PATH=/data/hlarman1/PhIPdb/Software/BLAST+/ncbi-blast-2.8.1+/bin:"$PATH"
 
 A template is provided with field descriptions. In R, you can access this template by running `file.copy(system.file("example_config.tsv", package = "phipcc"), "config.tsv")`. For now, you will need to edit fields manually.
 
+```{bash, eval = FALSE}
+wd=~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/ # Project Directory
+
+```
+
+
 ### Description of Each Field
 
 
@@ -109,19 +115,21 @@ A template is provided with field descriptions. In R, you can access this templa
 ```{bash, eval = FALSE}
 
 cd /data/hlarman1/PhIPdb/Software/phipcc
- wd=~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/
- sbatch --export=wd=$wd runphipcc.sh
+wd=~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/ # Project Directory
+sbatch --export=wd=$wd runphipcc.sh
 
 ```
 
 ## Local report knitting
 
-Enable view hidden folders, then copy ".drake" and "data/" to a new project folder.
-Locally from RStudio, 
+
+1. From your project directory on MARCC, copy the /data/ directory to a new directory on your local computer.
+2. Locally from RStudio, execute the following lines: 
+
 ```{r, eval = FALSE}
 
-setwd("new_project_folder")
-phipcc::render_from_template()
+setwd("Local_Project_Directory") #Project Directory
+phipcc::render_from_template(import_rdata = TRUE)
 
 ```
 

@@ -148,7 +148,9 @@
 <div id="marcc" class="section level2">
 <h2 class="hasAnchor">
 <a href="#marcc" class="anchor"></a>MARCC</h2>
-<p>Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.</p>
+<ol style="list-style-type: decimal">
+<li>Open an SSH connection to MARCC from a Larman Lab affiliated account. Execute the following commands.</li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="bu">cd</span> /data/hlarman1/PhIPdb/Software/install_r_pkg</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="ex">sbatch</span> --export=pkg=<span class="st">"brandonsie/drake"</span> installGithub.sh</a>
@@ -167,7 +169,11 @@
 <div id="local" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local" class="anchor"></a>Local</h2>
-<p>Install <a href="https://www.r-project.org/">R (3.5+)</a> and <a href="https://www.rstudio.com/">RStudio</a>. In R console, execute:</p>
+<ol style="list-style-type: decimal">
+<li>Install <a href="https://www.r-project.org/">R (3.5+)</a> and <a href="https://www.rstudio.com/">RStudio</a>.<br>
+</li>
+<li>In R console, execute:</li>
+</ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co"># Required (for steps that are not yet supported on MARCC)</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
@@ -203,6 +209,7 @@
 <h2 class="hasAnchor">
 <a href="#configuration-file" class="anchor"></a>Configuration File</h2>
 <p>A template is provided with field descriptions. In R, you can access this template by running <code><a href="https://www.rdocumentation.org/packages/base/topics/files">file.copy(system.file("example_config.tsv", package = "phipcc"), "config.tsv")</a></code>. For now, you will need to edit fields manually.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="va">wd=</span>~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/ <span class="co"># Project Directory</span></a></code></pre></div>
 <div id="description-of-each-field" class="section level3">
 <h3 class="hasAnchor">
 <a href="#description-of-each-field" class="anchor"></a>Description of Each Field</h3>
@@ -211,18 +218,21 @@
 <div id="marcc-phipccdrake-pipeline" class="section level2">
 <h2 class="hasAnchor">
 <a href="#marcc-phipccdrake-pipeline" class="anchor"></a>MARCC <code>phipcc</code>/<code>drake</code> pipeline</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="bu">cd</span> /data/hlarman1/PhIPdb/Software/phipcc</a>
-<a class="sourceLine" id="cb4-3" title="3"> <span class="va">wd=</span>~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/</a>
-<a class="sourceLine" id="cb4-4" title="4"> <span class="ex">sbatch</span> --export=wd=<span class="va">$wd</span> runphipcc.sh</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="bu">cd</span> /data/hlarman1/PhIPdb/Software/phipcc</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="va">wd=</span>~/data/PhIPdb/Studies/Brandon/CaseControl/Lupus/virscan/ <span class="co"># Project Directory</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="ex">sbatch</span> --export=wd=<span class="va">$wd</span> runphipcc.sh</a></code></pre></div>
 </div>
 <div id="local-report-knitting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local-report-knitting" class="anchor"></a>Local report knitting</h2>
-<p>Enable view hidden folders, then copy “.drake” and “data/” to a new project folder. Locally from RStudio,</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/getwd">setwd</a></span>(<span class="st">"new_project_folder"</span>)</a>
-<a class="sourceLine" id="cb5-3" title="3">phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/render_from_template">render_from_template</a></span>()</a></code></pre></div>
+<ol style="list-style-type: decimal">
+<li>From your project directory on MARCC, copy the /data/ directory to a new directory on your local computer.</li>
+<li>Locally from RStudio, execute the following lines:</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/getwd">setwd</a></span>(<span class="st">"Local_Project_Directory"</span>) <span class="co">#Project Directory</span></a>
+<a class="sourceLine" id="cb6-3" title="3">phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/render_from_template">render_from_template</a></span>(<span class="dt">import_rdata =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 </div>
   </div>
