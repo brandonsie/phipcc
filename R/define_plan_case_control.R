@@ -281,6 +281,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
       #(!) plot 2 used to have log scale but then lose values of 0.
     plot3 = target(plot3_pval(data_annotated_rbind, filtered_data_types)),
 
+
     # Clustergram --------------------------------------------------------------
 
     run_clustergram = target(ifelse(nrow(data_annotated_rbind) > 1, TRUE, FALSE)),
@@ -363,6 +364,18 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     ),
 
 
+    # --------------------------------------------------------------------------
+    # Output
+
+    graphs = target(
+      list(plot1, plot2, plot3)
+    ),
+
+    write_output_targets = target(
+      save(config, candidate_table_flagged_html, candidate_table_html,
+           AVARDA_candidate_table_html, graphs, clustergram1, clustergram2,
+           file = "data/outputs.RData")
+    ),
 
     # --------------------------------------------------------------------------
 

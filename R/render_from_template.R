@@ -4,9 +4,12 @@
 #' @param output_file Name of generated html report. If not provided, a default value is generated.
 #' @param output_dir Directory in which to write report.
 #' @param set_title Character string to be used for report title.  If not provided, a default value is generated.
+#' @param import_rdata Logical whether or not to look for an .rdata file containing necessary targests at the path specified in rdata_path.
+#' @param rdata_path If import_rdata == TRUE, then an file with the specified name will be passed to load().
 #' @param config Configuration table used in phipcc:define_plan_case_control. After running drake::make on this plan, config can be retreived by calling drake::readd(config).  If not provided, a default value is generated.
 #' @param candidate_table_flagged Kable html object of flagged/annotated candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_flagged_html).  If not provided, a default value is generated.
 #' @param candidate_table_full Kable html object of all candidate hits to display in report. Retrieved by calling drake::readd(candidate_table_html).  If not provided, a default value is generated.
+#' @param AVARDA_candidate_table Kable html object of all AVARDA hits to display in report. Retrieved by calling drake::readd(AVARDA_candidate_table).  If not provided, a default value is generated.
 #' @param graphs List of ggplot objects to be plotted in report. Retreived by calling list(drake::readd(plot1), drake::readd(plot2), drake::readd(plot3)).  If not provided, a default value is generated.
 #' @param clustergram1 List of gplots::heatmap.2 object and sorted data. Retreived by calling drake::readd(clustergram1).  If not provided, a default value is generated.
 #' @param motifs Directory path to epitopefindr motifs folder. Typically paste0(getwd(), "/data/epitopefindr/intermediate_files/msa/").  If not provided, a default value is generated.
@@ -19,13 +22,19 @@
 
 render_from_template <- function(
   template = system.file("template_case_control.Rmd", package="phipcc"),
-  output_file = NULL, output_dir = getwd(), set_title = NULL, config = NULL,
+  output_file = NULL, output_dir = getwd(), set_title = NULL,
+  import_rdata = FALSE, rdata_path = "data/outputs.RData",
+  config = NULL,
   candidate_table_flagged = NULL, candidate_table_full = NULL,
   AVARDA_candidate_table = NULL,
   graphs = NULL,
   clustergram1 = NULL, motifs = NULL, clustergram2 = NULL
   ){
 
+
+  if(import_rdata == TRUE){
+    load(rdata_path)
+  }
 
   # if(is.null(config)) drake::loadd(config)
   # if(is.null(candidate_table_flagged)) drake::loadd(candidate_table_flagged)

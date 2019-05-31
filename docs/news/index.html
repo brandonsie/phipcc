@@ -6,12 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RCPGenerator calculates RCP, Relative Control Percentile, a case-control
-statistic describing the percentile from 0.0 to 1.0 of one score against
-that of a control population. For example, if a control population consisted
-of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
-assigned an RCP of 0.25, because 5.0 is higher than 25<!-- % of the control -->
-population. In this implementation, ties count as losses. — RCPGenerator • phipcc</title>
+<title>Changelog • phipcc</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -49,19 +44,7 @@ population. In this implementation, ties count as losses. — RCPGenerator • p
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="RCPGenerator calculates RCP, Relative Control Percentile, a case-control
-statistic describing the percentile from 0.0 to 1.0 of one score against
-that of a control population. For example, if a control population consisted
-of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
-assigned an RCP of 0.25, because 5.0 is higher than 25<!-- % of the control -->
-population. In this implementation, ties count as losses. — RCPGenerator" />
-
-<meta property="og:description" content="RCPGenerator calculates RCP, Relative Control Percentile, a case-control
-statistic describing the percentile from 0.0 to 1.0 of one score against
-that of a control population. For example, if a control population consisted
-of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
-assigned an RCP of 0.25, because 5.0 is higher than 25
-population. In this implementation, ties count as losses." />
+<meta property="og:title" content="Changelog" />
 
 <meta property="og:image" content="https://brandonsie.github.io/phipcc/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -91,7 +74,7 @@ population. In this implementation, ties count as losses." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -170,69 +153,40 @@ population. In this implementation, ties count as losses." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>RCPGenerator calculates RCP, Relative Control Percentile, a case-control
-statistic describing the percentile from 0.0 to 1.0 of one score against
-that of a control population. For example, if a control population consisted
-of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
-assigned an RCP of 0.25, because 5.0 is higher than 25<!-- % of the control -->
-population. In this implementation, ties count as losses.</h1>
-    
-    <div class="hidden name"><code>RCPGenerator.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      
     </div>
 
-    <div class="ref-description">
-    
-    <p>RCPGenerator calculates RCP, Relative Control Percentile, a case-control
-statistic describing the percentile from 0.0 to 1.0 of one score against
-that of a control population. For example, if a control population consisted
-of three scores, 4.1, 5.0, 6.8, and 10.1, then a score of 5.0 would be
-assigned an RCP of 0.25, because 5.0 is higher than 25<!-- % of the control -->
-population. In this implementation, ties count as losses.</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>RCPGenerator</span>(<span class='no'>case</span>, <span class='no'>ctrl</span>, <span class='kw'>min_hits</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>hit_thresh</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>case</th>
-      <td><p>Data frame of cases.</p></td>
-    </tr>
-    <tr>
-      <th>ctrl</th>
-      <td><p>Data frame of controls.</p></td>
-    </tr>
-    <tr>
-      <th>min_hits</th>
-      <td><p>Numeric, hreshold for number of cases scoring above hit_thresh in
-original score required to be retained after filtering. By default, min_hits
-is set to 0 and thus RCP is calculated for all peptides. Setting a nonzero
-value for min_hits is only recommended if calculating RCP for all peptides
-is prohibitively slow.</p></td>
-    </tr>
-    <tr>
-      <th>hit_thresh</th>
-      <td><p>Vector of numeric, threshold value to apply when considering min_hits.
-hit_thresh is only evaluated if min_hits &gt; 0.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical to print status updates to console.</p></td>
-    </tr>
-    </table>
-    
-
+    <div id="phipmake-011" class="section level1">
+<h1 class="page-header">
+<a href="#phipmake-011" class="anchor"></a>phipmake 0.1.1</h1>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<p>Exported necessary data for template to an .Rdata file in /data/ subdirectory. This allows targets to be generated on one computer (e.g. on a high performance cluster) and the report to be generated locally after copying the /data/ directory and running <code><a href="../reference/render_from_template.html">phipcc::render_from_template(import_rdata == TRUE)</a></code>.</p>
+</div>
+</div>
+    <div id="phipmake-010" class="section level1">
+<h1 class="page-header">
+<a href="#phipmake-010" class="anchor"></a>phipmake 0.1.0</h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor"></a>Major changes</h2>
+<p>AVARDA incorporation</p>
+</div>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-                </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#phipmake-011">0.1.1</a></li>
+        <li><a href="#phipmake-010">0.1.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>
