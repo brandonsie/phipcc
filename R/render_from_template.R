@@ -35,7 +35,7 @@ render_from_template <- function(
   if(import_rdata == TRUE){
     load(rdata_path)
     candidate_table_flagged <- candidate_table_flagged_html
-    candidate_table_html <- candidate_table_full
+    candidate_table_full <- candidate_table_html
     AVARDA_candidate_table <- AVARDA_candidate_table_html
   }
 
