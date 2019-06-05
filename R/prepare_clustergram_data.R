@@ -91,15 +91,18 @@ prepare_clustergram_data <- function(
   # then remote rcp_subset cols 1 and 2
   # temporary fix duplicate names?
 
-  # update colnames as sample_key_field after splitting by sample_field_delimiter
-  colnames(rcp_subset) <- lapply(colnames(rcp_subset),function(x){
-    strsplit(x, sample_field_delimiter, fixed = TRUE) %>% unlist %>%
-      extract(sample_key_field)}) %>% unlist
-
 
   # Remove old label rows and compute heatmap
   heatmap_data <- rcp_subset[,!(colnames(rcp_subset) %in% c("Data.Type", "ID"))] %>% as.matrix
   rownames(heatmap_data) <- rownames(rcp_subset)
+
+
+  # update colnames as sample_key_field after splitting by sample_field_delimiter
+  colnames(heatmap_data) <- lapply(colnames(heatmap_data),function(x){
+    strsplit(x, sample_field_delimiter, fixed = TRUE) %>% unlist %>%
+      extract(sample_key_field)}) %>% unlist
+
+
 
 
   return(heatmap_data)
