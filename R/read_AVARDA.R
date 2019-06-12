@@ -24,7 +24,7 @@ read_AVARDA <- function(
   seropos_data <- list()
   for(i in 1:length(seropos_paths)){
 
-    this_data <- data.table::fread(seropos_paths[i])
+    this_data <- data.table::fread(seropos_paths[i], data.table = FALSE)
     this_data <- replace(this_data, is.na(this_data), 1)
     this_data <- this_data[order(this_data$Virus),]
 
@@ -35,7 +35,7 @@ read_AVARDA <- function(
   # Read and Aggregate Breadth Data
   breadth_data <- list()
   for(i in 1:length(breadth_paths)){
-    this_data <- data.table::fread(breadth_paths[i])
+    this_data <- data.table::fread(breadth_paths[i], data.table = FALSE)
     this_data <- replace(this_data, is.na(this_data), 0)
     this_data <- this_data[order(this_data$Virus),]
 

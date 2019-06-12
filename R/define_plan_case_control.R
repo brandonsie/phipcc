@@ -168,17 +168,17 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     #(!) move stats targets outside
 
-    AVARDA_case_breadth_rcp = target(
-      if(!!use_AVARDA){
-        RCPGenerator(AVARDA_case_data$breadth, AVARDA_ctrl_data$breadth)
-      } else NA
-    ),
-
-    AVARDA_ctrl_breadth_rcp = target(
-      if(!!use_AVARDA){
-        RCPGenerator(AVARDA_ctrl_data$breadth, "self")
-      } else NA
-    ),
+    # AVARDA_case_breadth_rcp = target(
+    #   if(!!use_AVARDA){
+    #     phipmake::RCPGenerator(AVARDA_case_data$breadth, AVARDA_ctrl_data$breadth)
+    #   } else NA
+    # ),
+    #
+    # AVARDA_ctrl_breadth_rcp = target(
+    #   if(!!use_AVARDA){
+    #     phipmake::RCPGenerator(AVARDA_ctrl_data$breadth, "self")
+    #   } else NA
+    # ),
 
     AVARDA_stats = target(
       if(!!use_AVARDA){

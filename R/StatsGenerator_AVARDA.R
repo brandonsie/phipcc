@@ -170,7 +170,10 @@ StatsGenerator_AVARDA <- function(
 
 
   output_data$PVal.Min <-
-    apply(output_data[,c("Seropos.Fisher.PVal","Seropos.Breadth.Wilcox.PVal")],1,min)
+    apply(output_data[,c("Seropos.Fisher.PVal","Seropos.Breadth.Wilcox.PVal")],
+          1, function(x){
+            min(na.omit(x))
+          })
 
 
   return(output_data)
