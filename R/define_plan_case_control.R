@@ -20,6 +20,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   ctrl_names <- phipmake::getparam(config, "ctrl_names") %>% param_split(delimiter)
   input_dirs <- phipmake::getparam(config, "input_dirs") %>% param_split(delimiter)
   data_types <- phipmake::getparam(config, "data_types") %>% param_split(delimiter)
+  data_names <- phipmake::getparam(config, "data_names") %>% param_split(delimiter)
   hit_thresh <- phipmake::getparam(config, "hit_thresh") %>% param_split(delimiter) %>% as.numeric
 
   input_files <- lapply(data_types, function(x){
@@ -78,10 +79,10 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   output.ext <- "tsv"
   sn.ext <- paste0(".", output.ext)
 
-  names.case.data <- paste0(sn.odir, data_types, "_Case",sn.ext)
-  names.ctrl.data <- paste0(sn.odir, data_types, "_Ctrl",sn.ext)
-  names.case.rcp <- paste0(sn.odir, data_types, "_Case_RCP",sn.ext)
-  names.ctrl.rcp <- paste0(sn.odir, data_types, "_Ctrl_RCP",sn.ext)
+  names.case.data <- paste0(sn.odir, data_names, "_Case",sn.ext)
+  names.ctrl.data <- paste0(sn.odir, data_names, "_Ctrl",sn.ext)
+  names.case.rcp <- paste0(sn.odir, data_names, "_Case_RCP",sn.ext)
+  names.ctrl.rcp <- paste0(sn.odir, data_names, "_Ctrl_RCP",sn.ext)
 
 
   # ============================================================================
@@ -95,13 +96,13 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     # Gather data --------------------------------------------------------------
 
     case_data = target(
-      gather_sample_list(!!data_types, !!input_files, !!case_names)
+      gather_sample_list(!!data_names, !!input_files, !!case_names)
       #gather_sample_list should return a list
-      # element NAMES are data_types
+      # element NAMES are data_names
       # elements are data corresponding to datatype. from phipmake::gather_data
     ),
     ctrl_data = target(
-      gather_sample_list(!!data_types, !!input_files, !!ctrl_names)
+      gather_sample_list(!!data_names, !!input_files, !!ctrl_names)
     ),
     #(!) need tidyeval for data.types OR bind_rows
 
@@ -250,10 +251,10 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     ),
 
 
-    filtered_data_types = target(names(data_filtered)),
+    filtered_data_names = target(names(data_filtered)),
     filtered_data_level = target({
-      type_level_map <- data.frame(type = !!data_types, level = !!data_level);
-      return(type_level_map$level[match(filtered_data_types, type_level_map$type)])
+      type_level_map <- data.frame(type = !!data_names, level = !!data_level);
+      return(type_level_map$level[match(filtered_data_names, type_level_map$type)])
     }),
     annot = target(data.table::fread(!!annot_path, data.table = FALSE)),
 
@@ -275,11 +276,11 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     # Exploratory Graphs -------------------------------------------------------
 
-    plot1 = target(plot1_hitfreq(data_annotated_rbind, filtered_data_types)),
-    plot2 = target(plot2_hitscore(data_annotated_rbind, filtered_data_types)),
+    plot1 = target(plot1_hitfreq(data_annotated_rbind, filtered_data_names)),
+    plot2 = target(plot2_hitscore(data_annotated_rbind, filtered_data_names)),
       #(!) try geom_count instead of geom_jitter
       #(!) plot 2 used to have log scale but then lose values of 0.
-    plot3 = target(plot3_pval(data_annotated_rbind, filtered_data_types)),
+    plot3 = target(plot3_pval(data_annotated_rbind, filtered_data_names)),
 
 
     # Clustergram --------------------------------------------------------------

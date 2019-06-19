@@ -7,6 +7,7 @@ case_names	"Project.serum.Project.Patient1.20A20G.1,Project.serum.Project.Patien
 ctrl_names	"Project.serum.Project.Control_1.20A20G.1,Project.serum.Project.Control_2.20A20G.1,Project.serum.Project.Control_3.20A20G.1,Project.serum.Project.Control_4.20A20G.1,Project.serum.Project.Control_5.20A20G.1,Project.serum.Project.Control_6.20A20G.1,Project.serum.Project.Control_7.20A20G.1,Project.serum.Project.Control_8.20A20G.1,Project.serum.Project.Control_9.20A20G.1,Project.serum.Project.Control_10.20A20G.1"	data column names corresponding to control samples
 input_dirs	"/data/caseData,/data/ctrlData"	directories that hold case and control data for this library
 data_types	"zscore,promax,polycl"	grep terms to search for in input_dirs
+data_names	"zscore,promax,polycl"	terms corresponding to data_types to display in R markdown report
 data_level	"peptide,protein,protein"	"peptide or protein, corresponding to data_types. Affect annotation."
 min_hits_rcpgenerator	2	Minimum number of hits based on hit_thresh required to compute case_rcp for that peptide or protein.
 hit_thresh	"10,10,2"	Threshold for considering data hit.
