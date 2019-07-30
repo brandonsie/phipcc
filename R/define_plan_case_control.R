@@ -322,7 +322,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     run_epitopefindr = target(
       ifelse(
-        !!run_epitopefinder == FALSE, FALSE,
+        !!run_epitopefindr == FALSE, FALSE,
         ifelse(
           nrow(fasta_table) > 0, TRUE, FALSE
         )
