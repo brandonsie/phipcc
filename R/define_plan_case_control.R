@@ -68,7 +68,9 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
 
   # for epitopefindr
+  run_epitopefindr <- phipmake::getparam(config, "run_epitopefindr") %>% as.logical
   epf_params <- phipmake::getparam(config, "epf_params")
+
 
   # ----------------------------------------------------------------------------
   # Output File Names
@@ -318,7 +320,15 @@ define_plan_case_control <- function(config_name = "config.tsv"){
                  Seq = data_annotated_rbind$pep_aa) %>% na.omit
     ),
 
-    run_epitopefindr = target(ifelse(nrow(fasta_table) > 0, TRUE, FALSE)),
+    run_epitopefindr = target(
+      ifelse(
+        !!run_epitopefinder == FALSE, FALSE,
+        ifelse(
+          nrow(fasta_table) > 0, TRUE, FALSE
+        )
+
+      )
+    ),
 
     write_hits_fasta = target(
       epitopefindr::writeFastaAA(fasta_table, file_out("data/hits.fasta"))
