@@ -65,7 +65,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
   AVARDA_paths <- phipmake::getparam(config, "AVARDA_paths") %>% param_split(delimiter)
   AVARDA_seropos_grep <- phipmake::getparam(config, "AVARDA_seropos_grep")
   AVARDA_breadth_grep <- phipmake::getparam(config, "AVARDA_breadth_grep")
-
+  remove_leading_x <- phipmake::getparam(config, "remove_leading_x")
 
   # for epitopefindr
   run_epitopefindr <- phipmake::getparam(config, "run_epitopefindr") %>% as.logical
@@ -153,7 +153,7 @@ define_plan_case_control <- function(config_name = "config.tsv"){
 
     AVARDA_data = target(
       if(!!use_AVARDA){
-        read_AVARDA(file_in(!!AVARDA_paths), !!AVARDA_seropos_grep, !!AVARDA_breadth_grep)
+        read_AVARDA(file_in(!!AVARDA_paths), !!AVARDA_seropos_grep, !!AVARDA_breadth_grep, !!remove_leading_x)
       } else NA
     ),
 

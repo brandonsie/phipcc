@@ -5,7 +5,8 @@
 
 read_AVARDA <- function(
   AVARDA_paths, AVARDA_seropos_grep = "full_BH_p_value",
-  AVARDA_breadth_grep = "full_filtered_evidence_number"
+  AVARDA_breadth_grep = "full_filtered_evidence_number",
+  remove_leading_x = FALSE
 ){
 
   # Identify paths to relevant files
@@ -32,7 +33,7 @@ read_AVARDA <- function(
   }
   seropos_data <- dplyr::bind_cols(seropos_data)
 
-  # Read and Aggregate Breadth Data
+    # Read and Aggregate Breadth Data
   breadth_data <- list()
   for(i in 1:length(breadth_paths)){
     this_data <- data.table::fread(breadth_paths[i], data.table = FALSE)
@@ -43,6 +44,13 @@ read_AVARDA <- function(
 
   }
   breadth_data <- dplyr::bind_cols(breadth_data)
+
+
+  # remove leading X in filenames if remove_leading_x == TRUE
+  if(remove_leading_x == TRUE){
+    names(seropos_data) <- gsub("^x", "", names(seropos_data), ignore.case = TRUE)
+    names(breadth_data) <- gsub("^x", "", names(breadth_data), ignore.case = TRUE)
+  }
 
   # Prepare Output List
   output_data <- list(seropos = seropos_data, breadth = breadth_data)
