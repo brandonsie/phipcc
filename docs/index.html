@@ -15,7 +15,7 @@
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Generate Case-Control Reports from PhIP-seq Data">
@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">phipcc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -108,6 +108,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="contents col-md-9">
 
@@ -124,11 +125,11 @@
 <li>In R console, execute:<br>
 </li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ropensci/drake"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/phipmake"</span>)</a>
-<a class="sourceLine" id="cb1-4" title="4">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/epitopefindr"</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"brandonsie/phipcc"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="cf">if</span>(<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"remotes"</span>)) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"ropensci/drake"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"brandonsie/phipmake"</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"brandonsie/epitopefindr"</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"brandonsie/phipcc"</span>)</a></code></pre></div>
 <div id="additional-epitopefindr-specific-setup-steps" class="section level2">
 <h2 class="hasAnchor">
 <a href="#additional-epitopefindr-specific-setup-steps" class="anchor"></a>Additional epitopefindr-specific setup steps</h2>
@@ -139,33 +140,33 @@
 </li>
 <li>In R console, execute:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/ns-load">requireNamespace</a></span>(<span class="st">"BiocManager"</span>)) <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
-<a class="sourceLine" id="cb2-2" title="2">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Biostrings"</span>, <span class="st">"IRanges"</span>, <span class="st">"msa"</span>, <span class="st">"S4Vectors"</span>))</a>
-<a class="sourceLine" id="cb2-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"mhahsler/rBLAST"</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>)) <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Biostrings"</span>, <span class="st">"IRanges"</span>, <span class="st">"msa"</span>, <span class="st">"S4Vectors"</span>))</a>
+<a class="sourceLine" id="cb2-3" title="3">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"mhahsler/rBLAST"</span>)  </a></code></pre></div>
 </div>
 </div>
 <div id="usage" class="section level1">
 <h1 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h1>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Load and attach main libraries</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(phipcc)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(drake)</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(phipcc)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(drake)</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(magrittr)</a>
 <a class="sourceLine" id="cb3-5" title="5"></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co"># Setup phipcc configuration file</span></a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="co"># A template is provided with field descriptions. For now, you will need to edit fields manually.</span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files">file.copy</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"example_config.tsv"</span>, <span class="dt">package =</span> <span class="st">"phipcc"</span>), <span class="st">"config.tsv"</span>)</a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.copy</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"example_config.tsv"</span>, <span class="dt">package =</span> <span class="st">"phipcc"</span>), <span class="st">"config.tsv"</span>)</a>
 <a class="sourceLine" id="cb3-9" title="9"></a>
 <a class="sourceLine" id="cb3-10" title="10"><span class="co"># Prepare drake plan</span></a>
-<a class="sourceLine" id="cb3-11" title="11">drake<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/drake/topics/expose_imports">expose_imports</a></span>(<span class="st">"phipcc"</span>)</a>
-<a class="sourceLine" id="cb3-12" title="12">plan &lt;-<span class="st"> </span>phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/define_plan_case_control">define_plan_case_control</a></span>(<span class="dt">config_name =</span> <span class="st">"config.tsv"</span>)</a>
+<a class="sourceLine" id="cb3-11" title="11">drake<span class="op">::</span><span class="kw"><a href="https://docs.ropensci.org/drake/reference/expose_imports.html">expose_imports</a></span>(<span class="st">"phipcc"</span>)</a>
+<a class="sourceLine" id="cb3-12" title="12">plan &lt;-<span class="st"> </span>phipcc<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/phipcc/man/define_plan_case_control.html">define_plan_case_control</a></span>(<span class="dt">config_name =</span> <span class="st">"config.tsv"</span>)</a>
 <a class="sourceLine" id="cb3-13" title="13"></a>
 <a class="sourceLine" id="cb3-14" title="14"><span class="co"># Build targets specified in plan</span></a>
-<a class="sourceLine" id="cb3-15" title="15">drake<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/drake/topics/make">make</a></span>(plan)</a>
+<a class="sourceLine" id="cb3-15" title="15">drake<span class="op">::</span><span class="kw"><a href="https://docs.ropensci.org/drake/reference/make.html">make</a></span>(plan)</a>
 <a class="sourceLine" id="cb3-16" title="16"></a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="co"># Incorporate targets from drake into R Markdown report</span></a>
 <a class="sourceLine" id="cb3-18" title="18"><span class="co"># Should be called from the same working directory as drake::make(plan)</span></a>
-<a class="sourceLine" id="cb3-19" title="19">phipcc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/phipcc/topics/render_from_template">render_from_template</a></span>()</a></code></pre></div>
+<a class="sourceLine" id="cb3-19" title="19">phipcc<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/phipcc/man/render_from_template.html">render_from_template</a></span>()</a></code></pre></div>
 </div>
 
   </div>
@@ -187,13 +188,15 @@
   </div>
 </div>
 
+
       <footer><div class="copyright">
   <p>Developed by Brandon Sie.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
