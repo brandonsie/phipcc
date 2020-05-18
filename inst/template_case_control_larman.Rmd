@@ -1,0 +1,407 @@
+---
+author: "Brandon Sie"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document: 
+    code_folding: hide
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: inline
+params:
+  set_title: "Test"
+  config: NULL
+  candidate_table_flagged: NULL
+  candidate_table_full: NULL
+  AVARDA_candidate_table: NULL
+  graphs: NULL
+  cluster1: NULL
+  motifs: NULL
+  cluster2: NULL
+title: "`r params$set_title`"
+---
+
+
+# I. Introduction {.tabset}
+
+## Report Overview  
+
+This report compares the data of our case population (__`r phipmake::getparam(config, "proj_id")`, n = `r phipmake::getparam(config, "case_names") %>% strsplit(phipmake::getparam(config, "delimiter")) %>% unlist %>% length`__)
+against that of a control population (__`r phipmake::getparam(config, "ctrl_id")`, n = `r phipmake::getparam(config, "ctrl_names") %>% strsplit(phipmake::getparam(config, "delimiter")) %>% unlist %>% length`__)
+to generate a list of candidate antigens from the __`r phipmake::getparam(config, "library")`__ library.
+
+For each of these samples, we performed [PhIP-Seq](https://www.nature.com/articles/s41596-018-0025-6) to measure antibody response against our libraries of phage displayed peptides. 
+
+### Types of summary statistics used in this analysis  
+
+* Z-score describes normalized enrichment based on next-gen sequencing reads. Z > 10 suggests a "hit".
+* RCP (Relative Control Percentile) is the fraction of controls that score lower than a given case for a given peptide/protein.
+ 
+
+## Navigating this Document  
+
+* The table of contents on the left side of the document can be used to jump between sections.  
+* The plots and heatmaps in this document are made interactive using [`plotly`](https://plot.ly/r/). This means you can mousover points for more information, drag to zoom (double click to zoom out), and select/deselect data subsets in the legend.  
+* Sections of this report are often subdivided with tabs. Clicking on a tab will reveal the corresponding report section.  
+* The code used to generate this report can be viewed by expanding the `Code` buttons along the right side of the document. However, this document relies on pre-computation usin the [`phipmake`](https://github.com/brandonsie/phipmake) and [`phipcc`](https://github.com/brandonsie/phipcc) packages from Github.     
+
+## Config Documentation  
+
+These are the configuration parameters that were fed into `drake::make(phipcc::define_plan_case_control)`.  
+
+```{r Config Documentation}
+
+knitr::kable(config) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+  kableExtra::column_spec(2, width = "10em")
+
+```
+
+
+## Technical Documentation
+
+```{r}
+sessionInfo()
+```
+
+
+
+# II. Candidate Antigen Tables {.tabset}  
+<font size="1"><a href="#top">[Top]</a></font>  
+
+
+After standard post-processing of the assay sequencing data to generate enrichment scores, we perform Fisher's exact test to compare the scores of cases vs. controls for each peptide & protein. The p values from this Fisher's test are corrected using Benjamini & Hochberg method (BH).
+
+We now take a subset of peptides/proteins for which:  
+
+* at least `r config$value[config$param == "min_hits_enrichment"]` cases exhibit an enrichment score (`r config$value[config$param == "data_types"]`) above threshold (`r config$value[config$param == "hit_thresh"]`),
+* the cases exhibit a hit frequency higher than that of the controls,   
+* The larger of (i) n = `r config$value[config$param == "min_hits_rcp"]` or (ii) `r as.numeric(config$value[config$param == "min_freq_hits_rcp"]) * 100`% rounded up of cases scored above the 95th percentile of the control population,  
+* Fisher's exact test gives a BH-corrected p value < `r config$vlaue[config$param == "pval_thresh"]` comparing case and controls against our traditional data thresholds and against an RCP threshold of 0.95.   
+
+
+## Annotated  
+
+This table represents candidate antigens with known associations in our database. (e.g. autoantigens, surface proteins). Click to the next tab to see all hits.   
+
+```{r Candidate Table 1}
+
+
+border <- "1px solid gray"
+scroll_height <- "1000px"
+use_scrollbox <- FALSE
+
+flag_table <- params$candidate_table_flagged
+if(nrow(flag_table) > 17) use_scrollbox <- TRUE
+
+if(nrow(flag_table) > 0){
+  flag_table <- flag_table %>%
+      knitr::kable(
+        format = "html", escape = FALSE,
+        caption = "Annotated Candidate Antigens", row.names = FALSE) %>%
+      kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+      kableExtra::add_header_above(
+        c(" " = 4, "Hit Freq" = 2,"Median Hit Score" = 2," " = 1)) %>%
+       kableExtra::column_spec(1,border_left = border) %>%
+       kableExtra::column_spec(ncol(flag_table), border_right = border) %>%
+       kableExtra::column_spec(c(1:4,6,8), border_right = border) 
+  
+  if(use_scrollbox){
+    flag_table <- flag_table %>% kableExtra::scroll_box(height = scroll_height)
+  }
+
+flag_table
+
+}
+
+
+```
+
+## All Hits  
+```{r Candidate Table 2}
+
+
+full_table <- params$candidate_table_full
+if(nrow(full_table) > 17) use_scrollbox <- TRUE
+
+if(nrow(full_table) > 0){
+  full_table <- full_table %>%
+      knitr::kable(
+        format = "html", escape = FALSE,
+        caption = "All Candidate Antigens", row.names = FALSE) %>%
+      kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>% 
+      kableExtra::add_header_above(
+        c(" " = 4, "Hit Freq" = 2,"Median Hit Score" = 2," " = 1)) %>%
+       kableExtra::column_spec(1,border_left = border) %>%
+       kableExtra::column_spec(ncol(full_table), border_right = border) %>%
+       kableExtra::column_spec(c(1:4,6,8), border_right = border)
+  
+  if(use_scrollbox){
+    full_table <- full_table %>% kableExtra::scroll_box(height = scroll_height)
+  }
+  
+  full_table
+
+}
+
+```
+
+## AVARDA Hits
+```{r AVARDA Candidate Table}
+
+AVARDA_table <- params$AVARDA_candidate_table
+if(!is.na(AVARDA_table[[1]][1])){
+  use_scrollbox <- FALSE
+  if(nrow(AVARDA_table) > 17) use_scrollbox <- TRUE
+  
+  if(nrow(AVARDA_table) > 0){
+    AVARDA_table <- AVARDA_table %>%
+      knitr::kable(
+        format = "html", escape = FALSE,
+        caption = "AVARDA Candidate Virus Antigens", row.names = FALSE) %>%
+      kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"), fixed_thead = TRUE) %>%
+      kableExtra::add_header_above(
+        c(" " = 1, "Seropos Frequency" = 2, "Median Seropos Score" = 2, 
+          " " = 1, "Seropos Breadth" = 2,
+          #"Breadth Hit Frequency" = 2, "Median Hit Breadth" = 2,
+          " " = 1)) %>%
+      kableExtra::column_spec(1, border_left = border) %>%
+      kableExtra::column_spec(ncol(AVARDA_table), border_right = border) %>% 
+      kableExtra::column_spec(c(1, 3, 5, 6, 8, 9), border_right = border)
+      
+    if(use_scrollbox){
+      AVARDA_table <- AVARDA_table %>% kableExtra::scroll_box(height = scroll_height)
+    }
+      
+    AVARDA_table
+  }
+  
+  
+}
+
+```
+
+
+# III. Exploratory Analysis {.tabset}    
+<font size="1"><a href="#top">[Top]</a></font>  
+
+We can continue to explore this data via some graphs. Note these plots are interactive. You can click on the legend to enable/disable different traces, and you can drag a box around regions of the graph to zoom in.
+
+
+## Hit Frequency vs. Hit Score in Cases
+
+We define a "hit" as scoring above the 95th percentile of the control population (RCP>0.95). Among our case samples, we plot the hit frequency among cases against the median score of these hits.
+
+```{r Plot 1, fig.width = 11}
+plotly::ggplotly(graphs[[1]])
+```
+
+##  Median Hit Score, Cases vs. Controls
+
+Based on our definition of hit, there are always ~5% of controls that also score as a hit for any given peptide or protein. Here we plot the median score of hits among cases against the median score of hits among controls.
+
+```{r Plot 2, fig.width = 11}
+plotly::ggplotly(graphs[[2]])
+```
+
+## P-Value vs. Median Case Hit Score
+
+As mentioned earlier, we perform a Fisher's exact test comparing the number of hits in cases vs. controls and perform a Benjamini-Hochberg correction of the p values from this test. Here we plot the negative log base 10 of these corrected p values against the median score of hits among cases.
+
+```{r Plot 3, fig.width = 11}
+plotly::ggplotly(graphs[[3]])
+```
+
+
+
+# IV. Hit Clustering {.tabset}  
+<font size="1"><a href="#top">[Top]</a></font>  
+
+## Clustergram
+
+I produce a clustergram of these hits using Ward's method for agglomeration. Each row corresponds to a peptide or protein from our filtered hit table and each column corresponds to a case sample. Squares shaded in black indicate an RCP hit, meaning that the sample scored above the 95th percentile of the control population for that peptide or protein. The dendrograms from this clustering are displayed on the following tabs.
+
+```{r Clustergram 1, fig.width = 11, fig.height = 9}
+if(!is.na(params$cluster1[[1]][1])){
+  clustergram_sorted <- params$cluster1[[3]]
+  htext <- params$cluster1[[2]]
+  ncolors <- 2
+  my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
+
+
+ heatmaply::heatmaply(
+    clustergram_sorted, custom_hovertext = htext,
+    main = paste("Candidate Antigen Clustergram"),
+    colors = my_palette,
+    fontsize_row = 8,
+    fontsize_col = 8,
+    column_text_angle = 90,
+    margins = c(65, 120),
+    trace = "both",
+    tracecol = "grey",
+    Rowv = FALSE,
+    Colv = FALSE,
+    grid_gap = 1,
+    hide_colorbar = TRUE)
+}
+
+ 
+```
+
+
+
+
+## Row (Peptide) Dendrogram
+```{r Row Dendrogram 1, fig.width = 11, fig.height = 9}
+if(!is.na(params$cluster1[[1]][1])){
+  row_dendrogram <- params$cluster1[[1]]$rowDendrogram
+  library(plotly)
+  
+  g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8))
+  # plotly::ggplotly(g)
+  g
+}
+
+```
+
+
+
+## Column (Sample) Dendrogram
+```{r Col Dendrogram 1, fig.width = 11, fig.height = 9}
+if(!is.na(params$cluster1[[1]][1])){
+  col_dendrogram <- params$cluster1[[1]]$colDendrogram
+  
+  g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8))
+  # plotly::ggplotly(g)
+  g
+}
+```
+
+
+
+
+# V. Epitope Clustering   
+<font size="1"><a href="#top">[Top]</a></font>  
+
+## epitopefindr Motifs {.tabset}  
+
+Now we call [epitopefindr](https://github.com/brandonsie/epitopefindr), an R pipeline designed to look for BLAST alignments among these filtered hit peptides. Peptides that share sequences that might be cross-reactively recognized by a single antibody are grouped, and these groups are reclustered along with any peptides that lacked significant alignments. We find evidence for the following motifs.
+
+<!-- (!) Also need to print output table  -->
+
+```{r Print Motifs, fig.height = 4, echo = FALSE, message = FALSE, results = "asis"}
+#print precomputed motifs
+# msa_path <- "data/epitopefindr/intermediate_files/msa/"
+msa_path <- params$motifs
+msa_name <- paste0(msa_path, "msa.pdf")
+
+if(file.exists(msa_name)){
+  num_page <- pdftools::pdf_info(msa_name)$pages
+  num_length <- nchar(num_page)
+  
+  for(i in 1:num_page){
+    num_padded <- formatC(i, width = num_length, flag = "0")
+    png_name <- paste0(msa_path, "msa-", num_padded, ".png")
+    pdf_name <- paste0(msa_path, "msa-", num_padded, ".pdf")
+    
+    if(!file.exists(png_name)){
+          pdftools::pdf_convert(pdf_name, format = "png", filenames = png_name,
+                          dpi = 300,verbose = FALSE)
+
+    }
+  
+    		cat("  \n### MSA",  i, "  \n")
+  		for(j in 1:length(png_name)){
+    		cat("![](",png_name[j],")",sep="")
+  		  # png_name[j] %>% (EBImage::readImage) %>% (EBImage::display)
+  		}
+  		cat("  \n  \n")
+  
+  
+  }
+
+}
+
+
+```
+
+
+## Epitope-Collapsed Hit Clustering {.tabset}
+
+### Epitope Clustergram
+
+We re-cluster, collapsing peptides for which epitopefindr detected possible cross-reactivity into single rows.
+
+```{r Clustergram 2, fig.width = 11, fig.height = 9}
+if(!is.na(params$cluster2[[1]][1])){
+  clustergram_sorted <- params$cluster2[[3]]
+  htext <- params$cluster2[[2]]
+  ncolors <- 5
+  my_palette <- colorRampPalette(c("white","black"))(n = ncolors)
+  
+  
+   heatmaply::heatmaply(
+      clustergram_sorted, custom_hovertext = htext,
+      main = paste("Candidate Antigen Clustergram (Epitope-Collapsed)"),
+      colors = my_palette,
+      fontsize_row = 8,
+      fontsize_col = 8,
+      column_text_angle = 90,
+      margins = c(65, 120),
+      trace = "both",
+      tracecol = "grey",
+      Rowv = FALSE,
+      Colv = FALSE,
+      grid_gap = 1,
+      hide_colorbar = TRUE)
+
+}
+
+```
+
+
+
+### Row (Peptide/Epitope) Clustergram
+```{r Row Dendrogram 2, fig.width = 9, fig.height = 9}
+if(!is.na(params$cluster2[[1]][1])){
+  row_dendrogram <- params$cluster2[[1]]$rowDendrogram
+  
+  g <- ggdendro::ggdendrogram(row_dendrogram, rotate = TRUE) + 
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8)) 
+  # plotly::ggplotly(g)
+  g
+}
+```
+
+
+
+
+### Column (Sample) Clustergram
+```{r Col Dendrogram 2, fig.width = 9, fig.height = 9}
+if(!is.na(params$cluster2[[1]][1])){
+  col_dendrogram <- params$cluster2[[1]]$colDendrogram
+  
+  g <- ggdendro::ggdendrogram(col_dendrogram, rotate = TRUE) + 
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size = 8)) 
+  # plotly::ggplotly(g)
+  g
+}
+```
+
+
+
+<!-- 
+Pass whole precomputed tables as params
+specify libraries
+
+
+
+https://stackoverflow.com/questions/30377213/how-to-include-rmarkdown-file-in-r-package/30377598
+put rmd in inst
+installed inst goes to main directory
+after build/install, reference with 
+system.file("template_case_control.Rmd", package="phipcc")
+"C:/Users/Brandon/Documents/R/win-library/3.5/phipcc/template_case_control.Rmd"
+-->

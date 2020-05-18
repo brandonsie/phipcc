@@ -263,7 +263,8 @@ define_plan_case_control <- function(config_name = "config.tsv"){
     data_annotated = target(
       annotate_cc_list(data_filtered, filtered_data_level, annot,
         !!peptide_col_id_match, !!protein_col_id_match, !!peptide_col_id_display,
-        !!protein_col_id_display, !!description_col_id, !!flag_col_id, !!flag_type
+        !!protein_col_id_display, !!description_col_id, !!flag_col_id, !!flag_type,
+        !!pep_aa
       )
     ),
 

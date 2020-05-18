@@ -46,5 +46,7 @@ drake::make(plan)
 # Should be called from the same working directory as drake::make(plan)
 phipcc::render_from_template()
 
+You can use your own template as well. The default template can be accessed and modified from `system.file("template_case_control.Rmd", package = "phipcc")`. To use a custom template, specify `phipcc::render_from_template(template = "path_to_my_template.Rmd")`
+
 ```
 

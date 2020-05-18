@@ -1,7 +1,7 @@
 Package: phipcc
 Type: Package
 Title: Generate Case-Control Reports from PhIP-seq Data
-Version: 0.1.2
+Version: 0.1.4
 Author: Brandon Sie
 Maintainer: Brandon Sie <brandonsie@gmail.com>
 Description: Process case/control data to perform exploratory data analysis, statistical comparison, hierarchical clustering of promising candidates, and BLAST-based epitope analysis.

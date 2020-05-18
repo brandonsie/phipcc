@@ -49,7 +49,8 @@
 
 
 <meta property="og:title" content="setup configurations for this case control study — config_case_control" />
-<meta property="og:description" content="Needs update." />
+<meta property="og:description" content="writes table (defualt name config.tsv) with specified values.
+For input into define_plan_case_control()" />
 <meta property="og:image" content="https://brandonsie.github.io/phipcc/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -93,7 +94,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phipcc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -165,12 +166,19 @@
     </div>
 
     <div class="ref-description">
-    <p>Needs update.</p>
+    <p>writes table (defualt name config.tsv) with specified values.
+For input into define_plan_case_control()</p>
     </div>
 
-    <pre class="usage"><span class='fu'>config_case_control</span>(<span class='kw'>case_names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(), <span class='kw'>ctrl_names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(),
-  <span class='kw'>input_dirs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(), <span class='kw'>data_types</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"enrichment"</span>, <span class='st'>"promax"</span>, <span class='st'>"polycl"</span>),
-  <span class='kw'>rcp_thresh</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>annot_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(), <span class='kw'>epf_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>())</pre>
+    <pre class="usage"><span class='fu'>config_case_control</span>(<span class='kw'>filename</span> <span class='kw'>=</span> <span class='st'>"config.tsv"</span>, <span class='no'>proj_id</span>, <span class='no'>library</span>, <span class='no'>ctrl_id</span>,
+  <span class='no'>delimiter</span>, <span class='no'>case_names</span>, <span class='no'>ctrl_names</span>, <span class='no'>input_dirs</span>, <span class='no'>data_types</span>, <span class='no'>data_names</span>,
+  <span class='no'>data_level</span>, <span class='no'>min_hits_rcpgenerator</span>, <span class='no'>hit_thresh</span>, <span class='no'>rcp_thresh</span>, <span class='no'>stat_test</span>,
+  <span class='no'>pval_correction</span>, <span class='no'>min_hits_enrichment</span>, <span class='no'>min_hits_rcp</span>, <span class='no'>min_freq_hits_rcp</span>,
+  <span class='no'>pval_thresh</span>, <span class='no'>annot_path</span>, <span class='no'>peptide_col_id_match</span>, <span class='no'>protein_col_id_match</span>,
+  <span class='no'>peptide_col_id_display</span>, <span class='no'>protein_col_id_display</span>, <span class='no'>description_col_id</span>,
+  <span class='no'>flag_col_id</span>, <span class='no'>flag_type</span>, <span class='no'>pep_aa</span>, <span class='no'>binarize_clustergram</span>,
+  <span class='no'>sample_field_delimiter</span>, <span class='no'>sample_key_field</span>, <span class='no'>run_epitopefindr</span>, <span class='no'>use_AVARDA</span>,
+  <span class='no'>AVARDA_paths</span>, <span class='no'>AVARDA_seropos_grep</span>, <span class='no'>AVARDA_breadth_grep</span>, <span class='no'>remove_leading_x</span>)</pre>
 
 
 

@@ -5,7 +5,8 @@
 \title{read_AVARDA}
 \usage{
 read_AVARDA(AVARDA_paths, AVARDA_seropos_grep = "full_BH_p_value",
-  AVARDA_breadth_grep = "full_filtered_evidence_number")
+  AVARDA_breadth_grep = "full_filtered_evidence_number",
+  remove_leading_x = FALSE)
 }
 \description{
 read_AVARDA

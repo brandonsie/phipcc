@@ -92,7 +92,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phipcc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
       </span>
     </div>
 
@@ -162,22 +162,48 @@
       
     </div>
 
-    <div id="phipmake-011" class="section level1">
+    <div id="phipcc-014-2020-05-18-monday" class="section level1">
 <h1 class="page-header">
-<a href="#phipmake-011" class="anchor"></a>phipmake 0.1.1</h1>
+<a href="#phipcc-014-2020-05-18-monday" class="anchor"></a>phipcc 0.1.4 (2020-05-18 Monday)</h1>
+<ul>
+<li>Slightly simplified default template used by <code><a href="../reference/render_from_template.html">render_from_template()</a></code>. Former default template can be used with <code><a href="../reference/render_from_template.html">phipcc::render_from_template(template = system.file("template_case_control_larman.Rmd", package = "phipcc"))</a></code>.</li>
+<li>Initial version of <code><a href="../reference/config_case_control.html">config_case_control()</a></code> implemented to write config.tsv parameter file from R.</li>
+</ul>
+</div>
+    <div id="phipcc-013-2020-04-14-tuesday" class="section level1">
+<h1 class="page-header">
+<a href="#phipcc-013-2020-04-14-tuesday" class="anchor"></a>phipcc 0.1.3 (2020-04-14 Tuesday)</h1>
+<ul>
+<li>added pep_aa term to plan target data_annotated to allow custom column name for amino acid sequence.</li>
+</ul>
+</div>
+    <div id="phipcc-012" class="section level1">
+<h1 class="page-header">
+<a href="#phipcc-012" class="anchor"></a>phipcc 0.1.2</h1>
+<ul>
+<li>added remove_leading_x parameter to fix naming issue for sample IDs starting with a number .E.g. X101.Sample Name is converted to 101.Sample.Name.</li>
+</ul>
+</div>
+    <div id="phipcc-011" class="section level1">
+<h1 class="page-header">
+<a href="#phipcc-011" class="anchor"></a>phipcc 0.1.1</h1>
 <div id="minor-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#minor-changes" class="anchor"></a>Minor changes</h2>
-<p>Exported necessary data for template to an .Rdata file in /data/ subdirectory. This allows targets to be generated on one computer (e.g. on a high performance cluster) and the report to be generated locally after copying the /data/ directory and running <code><a href="../reference/render_from_template.html">phipcc::render_from_template(import_rdata == TRUE)</a></code>.</p>
+<ul>
+<li>Exported necessary data for template to an .Rdata file in /data/ subdirectory. This allows targets to be generated on one computer (e.g. on a high performance cluster) and the report to be generated locally after copying the /data/ directory and running <code><a href="../reference/render_from_template.html">phipcc::render_from_template(import_rdata == TRUE)</a></code>.</li>
+</ul>
 </div>
 </div>
-    <div id="phipmake-010" class="section level1">
+    <div id="phipcc-010" class="section level1">
 <h1 class="page-header">
-<a href="#phipmake-010" class="anchor"></a>phipmake 0.1.0</h1>
+<a href="#phipcc-010" class="anchor"></a>phipcc 0.1.0</h1>
 <div id="major-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-changes" class="anchor"></a>Major changes</h2>
-<p>AVARDA incorporation</p>
+<ul>
+<li>AVARDA incorporation</li>
+</ul>
 </div>
 </div>
   </div>
@@ -186,8 +212,11 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#phipmake-011">0.1.1</a></li>
-        <li><a href="#phipmake-010">0.1.0</a></li>
+        <li><a href="#phipcc-014-2020-05-18-monday">0.1.4</a></li>
+        <li><a href="#phipcc-013-2020-04-14-tuesday">0.1.3</a></li>
+        <li><a href="#phipcc-012">0.1.2</a></li>
+        <li><a href="#phipcc-011">0.1.1</a></li>
+        <li><a href="#phipcc-010">0.1.0</a></li>
       </ul>
     </div>
   </div>
