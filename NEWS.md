@@ -1,3 +1,6 @@
+# phipcc 0.1.5 (2020-05-30 Sunday)
+- Update help file documentation for `phipcc::config_case_control()`
+
 # phipcc 0.1.4 (2020-05-18 Monday)  
 - Slightly simplified default template used by `render_from_template()`. Former default template can be used with `phipcc::render_from_template(template = system.file("template_case_control_larman.Rmd", package = "phipcc"))`.
 - Initial version of `config_case_control()` implemented to write config.tsv parameter file from R.
